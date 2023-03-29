@@ -2,7 +2,8 @@
 services:
 
   db:
-    image: mysql
+    image: mysql:8.0.32
+    container_name: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -20,11 +21,12 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=server=mysql;port=3306;database=BuildYourHead;user=root;password=superadmin;
 
   ui:
     depends_on: ["api"]
     build: ./build-your-head-ui/
     ports:
       - "3000:3000"
-    environment: # this doesn't work
+    environment:
       - REACT_APP_API_URL=http://localhost:8080/api

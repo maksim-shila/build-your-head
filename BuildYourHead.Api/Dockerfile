@@ -1,3 +1,4 @@
+# NOTE: Use docker-compose to run image or run from solution root
 FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
 EXPOSE 80
