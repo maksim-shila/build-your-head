@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BuildYourHead.Persistence.Repositories
 {
@@ -16,14 +11,14 @@ namespace BuildYourHead.Persistence.Repositories
 
         protected DbSet<TEntity> DbSet { get; }
 
-        public TEntity Get(TKey id)
+        public TEntity? Get(TKey id)
         {
             return DbSet.Find(id);
         }
 
         public IEnumerable<TEntity> Get()
         {
-            return DbSet.ToList();
+            return DbSet.ToList(); ;
         }
 
         public IQueryable<TEntity> GetAsQueryable()

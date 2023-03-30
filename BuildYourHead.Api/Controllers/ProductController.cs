@@ -1,5 +1,5 @@
-﻿using BuildYourHead.Persistence;
-using BuildYourHead.Persistence.Entities;
+﻿using BuildYourHead.Application.Services.Dto;
+using BuildYourHead.Application.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuildYourHead.Api.Controllers
@@ -8,42 +8,23 @@ namespace BuildYourHead.Api.Controllers
     [Route("/api/product")]
     public class ProductController : Controller
     {
-        public ProductController(UnitOfWork uow)
-        {
-            Uow = uow;
-        }
+        private IProductService _productService;
 
-        public UnitOfWork Uow { get; }
+        public ProductController(IProductService productService)
+        {
+            _productService = productService;
+        }
 
         [HttpGet]
-        public IActionResult Get(int id)
+        public ActionResult<ProductDto> Get(int id)
         {
-            var product = Uow.Products.Get(id);
-            return Json(product);
-        }
-
-        [HttpPost]
-        public IActionResult Post(Product product)
-        {
-            Uow.Products.Update(product);
-            Uow.Save();
-            return Json(product);
+            return _productService.Get(id);
         }
 
         [HttpPut]
-        public IActionResult Put(Product product)
+        public ActionResult Put(ProductDto product)
         {
-            Uow.Products.Create(product);
-            Uow.Save();
-            return Json(product);
-        }
-
-        [HttpDelete]
-        public void Delete(int id)
-        {
-            var product = Uow.Products.Get(id);
-            Uow.Products.Delete(product);
-            Uow.Save();
+            return _productService.Add(product);
         }
     }
 }

@@ -1,8 +1,5 @@
 ﻿using BuildYourHead.Persistence;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace BuildYourHead.Api
 {
@@ -10,8 +7,15 @@ namespace BuildYourHead.Api
     {
         public static void AddDbContext(this WebApplicationBuilder builder)
         {
-            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<ApplicationContext>(options => options.UseMySql(connectionString, new MySqlServerVersion("8.0.32")));
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            if (connectionString == null)
+            {
+                throw new ArgumentException("Connection string is not specified in configuration");
+            }
+            builder.Services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseMySql(connectionString, new MySqlServerVersion("8.0.32"));
+            });
         }
     }
 }

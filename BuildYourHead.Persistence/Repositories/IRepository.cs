@@ -2,7 +2,7 @@
 {
     public interface IRepository<TEntity, TKey> where TEntity : class
     {
-        TEntity Get(TKey id);
+        TEntity? Get(TKey id);
         IEnumerable<TEntity> Get();
         IQueryable<TEntity> GetAsQueryable();
 

@@ -19,6 +19,8 @@ namespace BuildYourHead.Api
 
             builder.AddDbContext();
             builder.Services.AddPersistence();
+            builder.Services.AddApplicationServices();
+            builder.Services.AddAutoMapperProfiles();
 
             if (builder.Environment.IsDevelopment())
             {

@@ -3,7 +3,7 @@ using BuildYourHead.Persistence.Repositories.Interfaces;
 
 namespace BuildYourHead.Persistence
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         public UnitOfWork(ApplicationContext context)
         {
@@ -11,7 +11,7 @@ namespace BuildYourHead.Persistence
             Context = context;
         }
 
-        public ApplicationContext Context { get; }
+        protected ApplicationContext Context { get; }
 
         #region Repositories
 
