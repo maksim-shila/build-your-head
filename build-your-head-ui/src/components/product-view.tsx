@@ -13,8 +13,8 @@ export const ProductView = () => {
 
     const onSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        console.log(await $api.Product.get(1));
-        console.log({ name, description });
+        const result = await $api.Product.put({ name, description, proteins, carbohydrates, fats, nutrition });
+        console.log(result);
     }
 
     const calculateNutrition = () => {

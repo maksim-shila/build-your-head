@@ -1,9 +1,8 @@
-﻿using BuildYourHead.Persistence;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace BuildYourHead.Api
 {
@@ -13,13 +12,18 @@ namespace BuildYourHead.Api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<ApplicationContext>(options => options.UseMySql(connectionString, new MySqlServerVersion("7.0")));
-
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddCors();
+
+            builder.AddDbContext();
+            builder.Services.AddPersistence();
+
+            if (builder.Environment.IsDevelopment())
+            {
+                builder.Logging.AddConsole();
+            }
 
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
@@ -28,9 +32,15 @@ namespace BuildYourHead.Api
                 app.UseSwaggerUI();
             }
 
-            app.UseCors(builder => builder.AllowAnyOrigin());
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin();
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+            });
             app.MapControllers();
             app.UseStaticFiles();
+
             app.Run();
         }
     }
