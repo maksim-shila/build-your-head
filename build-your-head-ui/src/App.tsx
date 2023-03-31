@@ -1,9 +1,12 @@
-import { ProductView } from "./components/product-view";
+import { Home } from "./home";
+import { Loader } from "./hooks/loader";
 
 export const App = () => {
   return (
-    <div id="app" className="container mt-5">
-      <ProductView />
-    </div>
+    <Loader>
+      <div id="app" className="container mt-5">
+        <Home />
+      </div>
+    </Loader>
   );
 }

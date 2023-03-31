@@ -7,5 +7,6 @@ namespace BuildYourHead.Application.Services.Interfaces
     {
         ActionResult Add(ProductDto product);
         ActionResult<ProductDto> Get(int id);
+        ActionResult<IList<ProductDto>> GetAll();
     }
 }

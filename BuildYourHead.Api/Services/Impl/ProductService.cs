@@ -5,6 +5,7 @@ using BuildYourHead.Application.Services.Interfaces;
 using BuildYourHead.Persistence;
 using BuildYourHead.Persistence.Entities;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Immutable;
 
 namespace BuildYourHead.Application.Services.Impl
 {
@@ -12,6 +13,13 @@ namespace BuildYourHead.Application.Services.Impl
     {
         public ProductService(IMapper mapper, IUnitOfWork uow) : base(mapper, uow)
         {
+        }
+
+        public ActionResult<IList<ProductDto>> GetAll()
+        {
+            var entities = Uow.Products.Get();
+            var dtos = entities.Select(e => Mapper.Map<ProductDto>(e)).ToImmutableList();
+            return Result.Json((IList<ProductDto>)dtos);
         }
 
         public ActionResult Add(ProductDto product)

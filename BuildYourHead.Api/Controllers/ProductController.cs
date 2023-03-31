@@ -16,7 +16,15 @@ namespace BuildYourHead.Api.Controllers
         }
 
         [HttpGet]
-        public ActionResult<ProductDto> Get(int id)
+        public ActionResult<IList<ProductDto>> Get()
+        {
+            Console.WriteLine("GET ALL PRODUCTS");
+            return _productService.GetAll();
+        }
+
+        [HttpGet]
+        [Route("/api/product/{id:int:min(0)}")]
+        public ActionResult<ProductDto> Get([FromRoute] int id)
         {
             return _productService.Get(id);
         }
