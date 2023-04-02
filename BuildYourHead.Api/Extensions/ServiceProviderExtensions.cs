@@ -3,7 +3,7 @@ using BuildYourHead.Application.Services.Impl;
 using BuildYourHead.Application.Services.Interfaces;
 using BuildYourHead.Persistence;
 
-namespace BuildYourHead.Api
+namespace BuildYourHead.Api.Extensions
 {
     public static class ServiceProviderExtensions
     {

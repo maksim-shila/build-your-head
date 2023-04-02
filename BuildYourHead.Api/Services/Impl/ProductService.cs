@@ -18,7 +18,7 @@ namespace BuildYourHead.Application.Services.Impl
         public ActionResult<IList<ProductDto>> GetAll()
         {
             var entities = Uow.Products.Get();
-            var dtos = entities.Select(e => Mapper.Map<ProductDto>(e)).ToImmutableList();
+            var dtos = entities.Select(Mapper.Map<ProductDto>).ToImmutableList();
             return Result.Json((IList<ProductDto>)dtos);
         }
 

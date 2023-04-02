@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+﻿using BuildYourHead.Api.Extensions;
 
 namespace BuildYourHead.Api
 {
@@ -28,6 +24,9 @@ namespace BuildYourHead.Api
             }
 
             var app = builder.Build();
+
+            app.ApplyMigrations();
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

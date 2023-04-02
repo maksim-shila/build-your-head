@@ -1,7 +1,7 @@
 ﻿using BuildYourHead.Persistence;
 using Microsoft.EntityFrameworkCore;
 
-namespace BuildYourHead.Api
+namespace BuildYourHead.Api.Extensions
 {
     public static class WebApplicationBuilderExtensions
     {
