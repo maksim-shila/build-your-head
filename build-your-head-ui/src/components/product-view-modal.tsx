@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Form, FormGroup, Input, Label, Col, Row, InputGroup, ModalHeader, ModalBody, Modal, ModalFooter } from "reactstrap";
 import $api, { Product } from "../api/api-client";
 import { useLoader } from "../hooks/loader";
+import { AvatarUpload } from "./avatar-upload";
 
 interface ProductViewModalProps {
     isOpen: boolean,
@@ -60,26 +61,35 @@ export const ProductViewModal = (props: ProductViewModalProps) => {
                 <ModalHeader toggle={toggle}>Add Product</ModalHeader>
                 <ModalBody>
                     <Form onSubmit={onSubmit}>
-                        <FormGroup>
-                            <Label for="name">Name:</Label>
-                            <Input
-                                id="name"
-                                name="name"
-                                autoComplete="off"
-                                value={name}
-                                onChange={e => setName(e.target.value)}
-                            />
-                        </FormGroup>
-                        <FormGroup>
-                            <Label for="description">Description:</Label>
-                            <Input
-                                id="description"
-                                name="description"
-                                type="textarea"
-                                value={description}
-                                onChange={e => setDescription(e.target.value)}
-                            />
-                        </FormGroup>
+                        <Row>
+                            <Col md={4}>
+                                <AvatarUpload />
+                            </Col>
+                            <Col>
+                                <FormGroup>
+                                    <Label for="name">Name:</Label>
+                                    <Input
+                                        id="name"
+                                        name="name"
+                                        autoComplete="off"
+                                        value={name}
+                                        onChange={e => setName(e.target.value)}
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="description">Description:</Label>
+                                    <textarea
+                                        id="description"
+                                        name="description"
+                                        className="textarea form-control"
+                                        rows={6}
+                                        value={description}
+                                        onChange={e => setDescription(e.target.value)}
+                                    />
+                                </FormGroup>
+                            </Col>
+                        </Row>
+
                         <Row>
                             <Col md={2}>
                                 <Label for="carbohydrates">Carbs:</Label>
