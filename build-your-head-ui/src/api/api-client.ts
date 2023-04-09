@@ -16,9 +16,19 @@ export interface Product {
 
 class ApiClient {
     public readonly Product = {
-        get: async (id: number): Promise<AxiosResponse<Product>> => axios.get(`/product?id=${id}`),
-        getAll: async (): Promise<AxiosResponse<Product[]>> => axios.get("/product"),
-        put: async (product: Product) => axios.put('/product', product)
+        get: (id: number): Promise<AxiosResponse<Product>> => axios.get(`/product/${id}`),
+        getAll: (): Promise<AxiosResponse<Product[]>> => axios.get("/product"),
+        put: (product: Product): Promise<AxiosResponse<Product>> => axios.put("/product", product),
+        delete: (id: number): Promise<AxiosResponse> => axios.delete(`/product/${id}`),
+        attachImage: (productId: number, imageId: string, primary = false) => axios.post(`/product/${productId}/image`, { imageId, primary })
+    }
+
+    public readonly Image = {
+        post: (image: File): Promise<AxiosResponse<string>> => {
+            const formData = new FormData();
+            formData.append("image", image)
+            return axios.post("/image", formData, { headers: { "Content-Type": "multipart/form-data" } })
+        }
     }
 }
 

@@ -21,11 +21,28 @@ export const Home = () => {
 
     const toggleProductDialog = () => setShowProductDialog(!showProductDialog);
 
+    const editProduct = (product: Product) => {
+
+    }
+
+    const deleteProduct = useLoader(async (product: Product) => {
+        if (!product.id) {
+            console.error("Couldn't delete product since it hasn't id");
+            return;
+        }
+        await $api.Product.delete(product.id);
+        await fetchProducts();
+    });
+
     return (
         <div>
             <Button onClick={toggleProductDialog}>Add Product</Button>
             <div className="mt-3">
-                <ProductsList products={products} />
+                <ProductsList
+                    products={products}
+                    onEdit={editProduct}
+                    onDelete={deleteProduct}
+                />
             </div>
             <ProductViewModal
                 isOpen={showProductDialog}

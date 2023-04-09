@@ -22,12 +22,13 @@ namespace BuildYourHead.Application.Services.Impl
             return Result.Json((IList<ProductDto>)dtos);
         }
 
-        public ActionResult Add(ProductDto product)
+        public ActionResult<ProductDto> Add(ProductDto product)
         {
             var entity = Mapper.Map<Product>(product);
             Uow.Products.Create(entity);
             Uow.Save();
-            return Result.Ok();
+            var dto = Mapper.Map<ProductDto>(entity);
+            return Result.Json(dto);
         }
 
         public ActionResult<ProductDto> Get(int id)
@@ -40,6 +41,26 @@ namespace BuildYourHead.Application.Services.Impl
 
             var dto = Mapper.Map<ProductDto>(entity);
             return Result.Json(dto);
+        }
+
+        public ActionResult AttachImage(int productId, int imageId, bool primary)
+        {
+            var entity = new ProductImage { ImageId = imageId, ProductId = productId };
+            Uow.ProductImages.Create(entity);
+            Uow.Save();
+            return Result.Ok();
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var entity = Uow.Products.Get(id);
+            if (entity == null)
+            {
+                return Result.NotFound();
+            }
+            Uow.Products.Delete(entity);
+            Uow.Save();
+            return Result.Ok();
         }
     }
 }

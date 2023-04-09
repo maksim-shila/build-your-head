@@ -1,13 +1,13 @@
-import { Table } from "reactstrap";
+import { Button, ButtonGroup, Table } from "reactstrap";
 import { Product } from "../api/api-client";
 
 interface ProductsListProps {
-    products: Product[]
+    products: Product[],
+    onEdit: (product: Product) => unknown;
+    onDelete: (product: Product) => unknown;
 }
 
-export const ProductsList = (props: ProductsListProps) => {
-
-    const { products } = { ...props };
+export const ProductsList: React.FC<ProductsListProps> = ({ products, onEdit, onDelete }) => {
 
     return (
         <div>
@@ -20,17 +20,24 @@ export const ProductsList = (props: ProductsListProps) => {
                         <th>Proteins</th>
                         <th>Fats</th>
                         <th>Nutrition</th>
+                        <th />
                     </tr>
                 </thead>
                 <tbody>
-                    {products.map(p => (
-                        <tr key={p.id}>
-                            <td>{p.name}</td>
-                            <td>{p.description}</td>
-                            <td>{p.carbohydrates}</td>
-                            <td>{p.proteins}</td>
-                            <td>{p.fats}</td>
-                            <td>{p.nutrition}</td>
+                    {products.map(product => (
+                        <tr key={product.id}>
+                            <td>{product.name}</td>
+                            <td>{product.description}</td>
+                            <td>{product.carbohydrates}</td>
+                            <td>{product.proteins}</td>
+                            <td>{product.fats}</td>
+                            <td>{product.nutrition}</td>
+                            <td>
+                                <ButtonGroup>
+                                    <Button color="warning" onClick={() => onEdit(product)}>Edit</Button>
+                                    <Button color="dark" onClick={() => onDelete(product)}>Delete</Button>
+                                </ButtonGroup>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

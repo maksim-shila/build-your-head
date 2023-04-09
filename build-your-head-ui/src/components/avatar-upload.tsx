@@ -1,7 +1,11 @@
 import React, { ChangeEvent } from "react";
 import styles from "./avatar-upload.module.css";
 
-export const AvatarUpload = () => {
+interface AvatarUploadProps {
+    onUpload: (file: File) => unknown
+}
+
+export const AvatarUpload: React.FC<AvatarUploadProps> = ({ onUpload }) => {
 
     const [imageName, setImageName] = React.useState<string>();
     const [imageUrl, setImageUrl] = React.useState<string | null>(null);
@@ -17,6 +21,7 @@ export const AvatarUpload = () => {
             return;
         }
 
+        onUpload(file);
         setImageName(file.name);
         setImageUrl(URL.createObjectURL(file));
     }

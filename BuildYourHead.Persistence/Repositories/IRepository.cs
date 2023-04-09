@@ -6,8 +6,8 @@
         IEnumerable<TEntity> Get();
         IQueryable<TEntity> GetAsQueryable();
 
-        void Create(TEntity entity);
-        void Update(TEntity entity);
+        TEntity Create(TEntity entity);
+        TEntity Update(TEntity entity);
         void Delete(TEntity entity);
     }
 }

@@ -19,9 +19,7 @@ const defaults: Product = {
     nutrition: 0
 }
 
-export const ProductViewModal = (props: ProductViewModalProps) => {
-
-    const { isOpen, toggle, onChange } = { ...props };
+export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, toggle, onChange }) => {
 
     const [name, setName] = React.useState(defaults.name);
     const [description, setDescription] = React.useState(defaults.name);
@@ -30,6 +28,8 @@ export const ProductViewModal = (props: ProductViewModalProps) => {
     const [fats, setFats] = React.useState(defaults.fats);
     const [nutrition, setNutrition] = React.useState(defaults.nutrition);
 
+    const [image, setImage] = React.useState<File | null>(null);
+
     const reset = () => {
         setName(defaults.name);
         setDescription(defaults.description);
@@ -37,12 +37,29 @@ export const ProductViewModal = (props: ProductViewModalProps) => {
         setProteins(defaults.proteins);
         setFats(defaults.fats);
         setNutrition(defaults.nutrition);
+
+        setImage(null);
     }
 
     const onSubmit = useLoader(async (event: React.FormEvent) => {
         event.preventDefault();
-        const result = await $api.Product.put({ name, description, proteins, carbohydrates, fats, nutrition });
-        await onChange(result.data);
+        const product = { name, description, proteins, carbohydrates, fats, nutrition };
+        const createProductResult = await $api.Product.put(product);
+        const productId = createProductResult.data.id;
+        if (!productId) {
+            console.error("Failed to create product");
+            return;
+        }
+        if (image != null) {
+            const uploadImageResult = await $api.Image.post(image);
+            const imageId = uploadImageResult.data;
+            if (!imageId) {
+                console.error("Failed to upload image");
+            } else {
+                await $api.Product.attachImage(productId, imageId, true);
+            }
+        }
+        await onChange(createProductResult.data);
         reset();
     });
 
@@ -63,7 +80,7 @@ export const ProductViewModal = (props: ProductViewModalProps) => {
                     <Form onSubmit={onSubmit}>
                         <Row>
                             <Col md={4}>
-                                <AvatarUpload />
+                                <AvatarUpload onUpload={image => setImage(image)} />
                             </Col>
                             <Col>
                                 <FormGroup>

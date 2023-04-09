@@ -26,19 +26,21 @@ namespace BuildYourHead.Persistence.Repositories
             return DbSet.AsQueryable();
         }
 
-        public void Create(TEntity entity)
+        public TEntity Create(TEntity entity)
         {
-            DbSet.Add(entity);
+            var entry = DbSet.Add(entity);
+            return entry.Entity;
+        }
+
+        public TEntity Update(TEntity entity)
+        {
+            var entry = DbSet.Update(entity);
+            return entry.Entity;
         }
 
         public void Delete(TEntity entity)
         {
             DbSet.Remove(entity);
-        }
-
-        public void Update(TEntity entity)
-        {
-            DbSet.Update(entity);
         }
     }
 }
