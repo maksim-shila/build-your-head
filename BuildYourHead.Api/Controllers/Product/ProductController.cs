@@ -19,17 +19,16 @@ namespace BuildYourHead.Api.Controllers.Product
         [Route("/api/product/")]
         public ActionResult<IList<ProductDto>> Get()
         {
-            Console.WriteLine("GET ALL PRODUCTS");
             return _productService.GetAll();
         }
 
         [HttpPut]
-
         [Route("/api/product/")]
         public ActionResult<ProductDto> Put(ProductDto product)
         {
             return _productService.Add(product);
         }
+
         [HttpGet]
         [Route("/api/product/{id}")]
         public ActionResult<ProductDto> Get([FromRoute] int id)
