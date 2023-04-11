@@ -23,15 +23,13 @@ namespace BuildYourHead.Api
             }
 
             var app = builder.Build();
-
-            app.ApplyMigrations();
-
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.ApplyMigrations();
+            app.UseCustomMiddlewares();
             app.UseCors(builder =>
             {
                 builder.AllowAnyOrigin();

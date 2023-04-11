@@ -5,7 +5,7 @@
 
 ## TODO:
 - cascade delete images when product deleted
-- error handling + status codes
 - pagination
 - separated context + service for images
 - requests/response models for controllers
+- entities models configurations

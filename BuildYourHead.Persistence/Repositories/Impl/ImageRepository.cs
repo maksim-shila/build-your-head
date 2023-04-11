@@ -5,8 +5,6 @@ namespace BuildYourHead.Persistence.Repositories.Impl
 {
     internal class ImageRepository : RepositoryBase<Image, int>, IImageRepository
     {
-        public ImageRepository(ApplicationContext context) : base(context)
-        {
-        }
+        public ImageRepository(ApplicationContext context) : base(context) { }
     }
 }

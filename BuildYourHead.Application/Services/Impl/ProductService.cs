@@ -1,5 +1,6 @@
 ﻿using BuildYourHead.Application.Core;
 using BuildYourHead.Application.Dto;
+using BuildYourHead.Application.Exceptions;
 using BuildYourHead.Application.Mappers;
 using BuildYourHead.Persistence;
 using BuildYourHead.Persistence.Entities;
@@ -34,7 +35,7 @@ namespace BuildYourHead.Application.Services.Impl
             var entity = Uow.Products.Get(id);
             if (entity == null)
             {
-                throw new ArgumentException();
+                throw new NotFoundException($"Product with id {id} not found.");
             }
 
             return _mapper.ToDto(entity);
@@ -52,7 +53,7 @@ namespace BuildYourHead.Application.Services.Impl
             var entity = Uow.Products.Get(id);
             if (entity == null)
             {
-                throw new ArgumentException();
+                throw new NotFoundException($"Product with id {id} not found.");
             }
             Uow.Products.Delete(entity);
             Uow.Save();
