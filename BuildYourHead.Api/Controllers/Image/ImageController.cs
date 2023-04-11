@@ -1,4 +1,5 @@
-﻿using BuildYourHead.Api.Services.Interfaces;
+﻿using BuildYourHead.Api.Extensions;
+using BuildYourHead.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuildYourHead.Api.Controllers.Image
@@ -17,7 +18,7 @@ namespace BuildYourHead.Api.Controllers.Image
         [HttpPost]
         public ActionResult<int> Post([FromForm] IFormFile image)
         {
-            return _imageService.Upload(image);
+            return _imageService.Upload(image.ToByteArray());
         }
     }
 }

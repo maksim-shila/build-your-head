@@ -1,6 +1,6 @@
 ﻿using BuildYourHead.Api.Controllers.Product.Requests;
-using BuildYourHead.Application.Services.Dto;
-using BuildYourHead.Application.Services.Interfaces;
+using BuildYourHead.Application.Dto;
+using BuildYourHead.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuildYourHead.Api.Controllers.Product
@@ -19,35 +19,40 @@ namespace BuildYourHead.Api.Controllers.Product
         [Route("/api/product/")]
         public ActionResult<IList<ProductDto>> Get()
         {
-            return _productService.GetAll();
+            var products = _productService.GetAll();
+            return Ok(products);
         }
 
         [HttpPut]
         [Route("/api/product/")]
-        public ActionResult<ProductDto> Put(ProductDto product)
+        public ActionResult<ProductDto> Put(ProductDto request)
         {
-            return _productService.Add(product);
+            var product = _productService.Add(request);
+            return Ok(product);
         }
 
         [HttpGet]
         [Route("/api/product/{id}")]
         public ActionResult<ProductDto> Get([FromRoute] int id)
         {
-            return _productService.Get(id);
+            var product = _productService.Get(id);
+            return Ok(product);
         }
 
         [HttpDelete]
         [Route("/api/product/{id}")]
         public ActionResult Delete([FromRoute] int id)
         {
-            return _productService.Delete(id);
+            _productService.Delete(id);
+            return Ok();
         }
 
         [HttpPost]
         [Route("/api/product/{id}/image")]
         public ActionResult PostImage([FromRoute] int id, [FromBody] PostImageRequest request)
         {
-            return _productService.AttachImage(id, request.ImageId, request.Primary);
+            _productService.AttachImage(id, request.ImageId, request.Primary);
+            return Ok();
         }
     }
 }

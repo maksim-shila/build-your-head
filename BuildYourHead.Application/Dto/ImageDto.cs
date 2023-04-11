@@ -1,4 +1,4 @@
-﻿namespace BuildYourHead.Api.Services.Dto
+﻿namespace BuildYourHead.Application.Dto
 {
     public class ImageDto
     {

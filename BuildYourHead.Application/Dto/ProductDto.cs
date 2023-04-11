@@ -1,4 +1,4 @@
-﻿namespace BuildYourHead.Application.Services.Dto
+﻿namespace BuildYourHead.Application.Dto
 {
     public class ProductDto
     {

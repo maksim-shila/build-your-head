@@ -1,8 +1,7 @@
-﻿using BuildYourHead.Api.Services;
-using BuildYourHead.Api.Services.Impl;
-using BuildYourHead.Api.Services.Interfaces;
+﻿using BuildYourHead.Application.Mappers;
+using BuildYourHead.Application.Mappers.Impl;
+using BuildYourHead.Application.Services;
 using BuildYourHead.Application.Services.Impl;
-using BuildYourHead.Application.Services.Interfaces;
 using BuildYourHead.Persistence;
 
 namespace BuildYourHead.Api.Extensions
@@ -18,11 +17,8 @@ namespace BuildYourHead.Api.Extensions
         {
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IImageService, ImageService>();
-        }
 
-        public static void AddAutoMapperProfiles(this IServiceCollection services)
-        {
-            services.AddAutoMapper(typeof(AutoMapperProfile));
+            services.AddTransient<IProductMapper, ProductMapper>();
         }
     }
 }
