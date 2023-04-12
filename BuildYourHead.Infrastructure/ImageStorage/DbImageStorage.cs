@@ -29,6 +29,20 @@ namespace BuildYourHead.Infrastructure.ImageStorage
             _context.SaveChanges();
             return entry.Entity;
         }
+
+        public void Delete(string path)
+        {
+            var entry = _context.Images.First(x => x.Path == path);
+            _context.Images.Remove(entry);
+            _context.SaveChanges();
+        }
+
+        public void Delete(IEnumerable<string> paths)
+        {
+            var entries = _context.Images.Where(x => paths.Contains(x.Path));
+            _context.Images.RemoveRange(entries);
+            _context.SaveChanges();
+        }
     }
 
     class ImageDbContext : DbContext

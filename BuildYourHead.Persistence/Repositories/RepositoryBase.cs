@@ -18,12 +18,7 @@ namespace BuildYourHead.Persistence.Repositories
 
         public IEnumerable<TEntity> Get()
         {
-            return DbSet.ToList(); ;
-        }
-
-        public IQueryable<TEntity> GetAsQueryable()
-        {
-            return DbSet.AsQueryable();
+            return DbSet.ToList();
         }
 
         public TEntity Create(TEntity entity)

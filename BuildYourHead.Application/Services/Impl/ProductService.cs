@@ -1,6 +1,7 @@
 ﻿using BuildYourHead.Application.Dto;
 using BuildYourHead.Application.Exceptions;
 using BuildYourHead.Application.Mappers;
+using BuildYourHead.Infrastructure.ImageStorage;
 using BuildYourHead.Persistence;
 using BuildYourHead.Persistence.Entities;
 
@@ -9,11 +10,13 @@ namespace BuildYourHead.Application.Services.Impl
     public class ProductService : IProductService
     {
         private readonly IProductMapper _mapper;
+        private readonly IImageStorage _imageStorage;
         private readonly IUnitOfWork _uow;
 
-        public ProductService(IProductMapper mapper, IUnitOfWork uow)
+        public ProductService(IProductMapper mapper, IImageStorage imageStorage, IUnitOfWork uow)
         {
             _mapper = mapper;
+            _imageStorage = imageStorage;
             _uow = uow;
         }
 
@@ -56,8 +59,11 @@ namespace BuildYourHead.Application.Services.Impl
             {
                 throw new NotFoundException($"Product with id {id} not found.");
             }
+            var imagesPaths = _uow.ProductImages.GetPaths(id);
             _uow.Products.Delete(entity);
             _uow.Save();
+
+            _imageStorage.Delete(imagesPaths);
         }
     }
 }
