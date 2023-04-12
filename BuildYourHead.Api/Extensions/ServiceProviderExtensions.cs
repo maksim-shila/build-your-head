@@ -2,7 +2,9 @@
 using BuildYourHead.Application.Mappers.Impl;
 using BuildYourHead.Application.Services;
 using BuildYourHead.Application.Services.Impl;
+using BuildYourHead.Infrastructure.ImageStorage;
 using BuildYourHead.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace BuildYourHead.Api.Extensions
 {
@@ -16,9 +18,29 @@ namespace BuildYourHead.Api.Extensions
         public static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddTransient<IProductService, ProductService>();
+
+            services.AddTransient<IImageStorage, DbImageStorage>();
             services.AddTransient<IImageService, ImageService>();
 
             services.AddTransient<IProductMapper, ProductMapper>();
+        }
+
+        public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            if (connectionString == null)
+            {
+                throw new ArgumentException("Connection string is not specified in configuration");
+            }
+            services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseMySql(connectionString, new MySqlServerVersion("8.0.32"));
+            });
+        }
+
+        public static void AddOptions(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.Configure<ImageStorageOptions>(configuration.GetSection("ImageStorage"));
         }
     }
 }

@@ -9,8 +9,7 @@ namespace BuildYourHead.Persistence
         {
         }
 
-        public DbSet<Product> Products { get; set; }
-        public DbSet<Image> Images { get; set; }
-        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductDbo> Products { get; set; }
+        public DbSet<ProductImageDbo> ProductImages { get; set; }
     }
 }

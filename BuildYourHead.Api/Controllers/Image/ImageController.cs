@@ -16,9 +16,10 @@ namespace BuildYourHead.Api.Controllers.Image
         }
 
         [HttpPost]
-        public ActionResult<int> Post([FromForm] IFormFile image)
+        public IActionResult Post([FromForm] IFormFile image)
         {
-            return _imageService.Upload(image.ToByteArray());
+            var imagePath = _imageService.Upload(image.ToByteArray());
+            return Ok(imagePath);
         }
     }
 }

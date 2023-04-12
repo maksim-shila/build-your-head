@@ -18,22 +18,7 @@ namespace BuildYourHead.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.Image", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<byte[]>("Content")
-                        .IsRequired()
-                        .HasColumnType("longblob");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.Product", b =>
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductDbo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,42 +49,33 @@ namespace BuildYourHead.Persistence.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductImage", b =>
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductImageDbo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
-
                     b.HasIndex("ProductId");
 
                     b.ToTable("ProductImages");
                 });
 
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductImage", b =>
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductImageDbo", b =>
                 {
-                    b.HasOne("BuildYourHead.Persistence.Entities.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BuildYourHead.Persistence.Entities.Product", "Product")
+                    b.HasOne("BuildYourHead.Persistence.Entities.ProductDbo", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Image");
 
                     b.Navigation("Product");
                 });

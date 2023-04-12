@@ -1,6 +1,6 @@
 ﻿namespace BuildYourHead.Persistence.Entities
 {
-    public class Product
+    public class ProductDbo
     {
         public int Id { get; set; }
         public string Name { get; set; } = "";

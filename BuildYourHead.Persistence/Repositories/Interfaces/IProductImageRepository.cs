@@ -2,7 +2,7 @@
 
 namespace BuildYourHead.Persistence.Repositories.Interfaces
 {
-    public interface IProductImageRepository : IRepository<ProductImage, int>
+    public interface IProductImageRepository : IRepository<ProductImageDbo, int>
     {
     }
 }

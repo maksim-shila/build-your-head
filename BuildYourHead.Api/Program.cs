@@ -7,13 +7,15 @@ namespace BuildYourHead.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var configuration = builder.Configuration;
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddCors();
 
-            builder.AddDbContext();
+            builder.Services.AddDbContext(configuration);
+            builder.Services.AddOptions(configuration);
             builder.Services.AddPersistence();
             builder.Services.AddApplicationServices();
 

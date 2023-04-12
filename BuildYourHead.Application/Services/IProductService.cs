@@ -7,7 +7,7 @@ namespace BuildYourHead.Application.Services
         ProductDto Add(ProductDto product);
         ProductDto Get(int id);
         IList<ProductDto> GetAll();
-        void AttachImage(int productId, int imageId, bool primary);
+        void AttachImage(int productId, string imagePath, bool primary);
         void Delete(int id);
     }
 }

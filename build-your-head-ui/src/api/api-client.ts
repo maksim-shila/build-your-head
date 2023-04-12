@@ -20,7 +20,7 @@ class ApiClient {
         getAll: (): Promise<AxiosResponse<Product[]>> => axios.get("/product"),
         put: (product: Product): Promise<AxiosResponse<Product>> => axios.put("/product", product),
         delete: (id: number): Promise<AxiosResponse> => axios.delete(`/product/${id}`),
-        attachImage: (productId: number, imageId: string, primary = false) => axios.post(`/product/${productId}/image`, { imageId, primary })
+        attachImage: (productId: number, imagePath: string, primary = false): Promise<AxiosResponse> => axios.post(`/product/${productId}/image`, { imagePath, primary })
     }
 
     public readonly Image = {

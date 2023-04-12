@@ -51,7 +51,7 @@ namespace BuildYourHead.Api.Controllers.Product
         [Route("/api/product/{id}/image")]
         public ActionResult PostImage([FromRoute] int id, [FromBody] PostImageRequest request)
         {
-            _productService.AttachImage(id, request.ImageId, request.Primary);
+            _productService.AttachImage(id, request.ImagePath, request.Primary);
             return Ok();
         }
     }

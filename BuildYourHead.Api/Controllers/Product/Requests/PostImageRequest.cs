@@ -2,7 +2,7 @@
 {
     public class PostImageRequest
     {
-        public int ImageId { get; set; }
+        public string ImagePath { get; set; } = null!;
         public bool Primary { get; set; }
     }
 }

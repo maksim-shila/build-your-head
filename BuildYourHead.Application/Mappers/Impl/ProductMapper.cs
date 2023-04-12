@@ -6,9 +6,9 @@ namespace BuildYourHead.Application.Mappers.Impl
 {
     public class ProductMapper : IProductMapper
     {
-        public Product ToEntity(ProductDto dto)
+        public ProductDbo ToEntity(ProductDto dto)
         {
-            return new Product
+            return new ProductDbo
             {
                 Id = dto.Id,
                 Name = dto.Name,
@@ -20,7 +20,7 @@ namespace BuildYourHead.Application.Mappers.Impl
             };
         }
 
-        public ProductDto ToDto(Product entity)
+        public ProductDto ToDto(ProductDbo entity)
         {
             return new ProductDto
             {
@@ -34,12 +34,12 @@ namespace BuildYourHead.Application.Mappers.Impl
             };
         }
 
-        public IList<ProductDto> ToDtos(IEnumerable<Product> entities)
+        public IList<ProductDto> ToDtos(IEnumerable<ProductDbo> entities)
         {
             return entities.Select(ToDto).ToImmutableList();
         }
 
-        public IList<Product> ToEntities(IEnumerable<ProductDto> dtos)
+        public IList<ProductDbo> ToEntities(IEnumerable<ProductDto> dtos)
         {
             return dtos.Select(ToEntity).ToImmutableList();
         }

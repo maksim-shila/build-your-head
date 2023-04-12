@@ -8,7 +8,6 @@ namespace BuildYourHead.Persistence
         public UnitOfWork(ApplicationContext context)
         {
             Products = new ProductRepository(context);
-            Images = new ImageRepository(context);
             ProductImages = new ProductImageRepository(context);
             Context = context;
         }
@@ -18,7 +17,6 @@ namespace BuildYourHead.Persistence
         #region Repositories
 
         public IProductRepository Products { get; }
-        public IImageRepository Images { get; }
         public IProductImageRepository ProductImages { get; }
 
         #endregion Repositories

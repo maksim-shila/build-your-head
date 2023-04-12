@@ -1,21 +1,19 @@
-﻿using BuildYourHead.Application.Core;
-using BuildYourHead.Persistence;
-using BuildYourHead.Persistence.Entities;
+﻿using BuildYourHead.Infrastructure.ImageStorage;
 
 namespace BuildYourHead.Application.Services.Impl
 {
-    public class ImageService : ServiceBase, IImageService
+    public class ImageService : IImageService
     {
-        public ImageService(IUnitOfWork uow) : base(uow)
+        private readonly IImageStorage _storage;
+
+        public ImageService(IImageStorage storage)
         {
+            _storage = storage;
         }
 
-        public int Upload(byte[] image)
+        public string Upload(byte[] image)
         {
-            var entity = new Image { Content = image };
-            Uow.Images.Create(entity);
-            Uow.Save();
-            return entity.Id;
+            return _storage.Upload(image).Path;
         }
     }
 }

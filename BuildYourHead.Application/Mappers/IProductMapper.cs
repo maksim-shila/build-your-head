@@ -5,9 +5,9 @@ namespace BuildYourHead.Application.Mappers
 {
     public interface IProductMapper
     {
-        Product ToEntity(ProductDto dto);
-        ProductDto ToDto(Product entity);
-        IList<Product> ToEntities(IEnumerable<ProductDto> dtos);
-        IList<ProductDto> ToDtos(IEnumerable<Product> entities);
+        ProductDbo ToEntity(ProductDto dto);
+        ProductDto ToDto(ProductDbo entity);
+        IList<ProductDbo> ToEntities(IEnumerable<ProductDto> dtos);
+        IList<ProductDto> ToDtos(IEnumerable<ProductDbo> entities);
     }
 }
