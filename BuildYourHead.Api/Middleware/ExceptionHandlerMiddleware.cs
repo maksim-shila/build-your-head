@@ -6,12 +6,6 @@ namespace BuildYourHead.Api.Middleware
 {
     public class ExceptionHandlerMiddleware
     {
-        [Serializable]
-        class ErrorResponse
-        {
-            public string Error { get; set; } = "";
-        }
-
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlerMiddleware> _logger;
 
