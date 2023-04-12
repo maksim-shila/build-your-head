@@ -59,6 +59,9 @@ namespace BuildYourHead.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 

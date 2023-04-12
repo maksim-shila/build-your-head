@@ -34,6 +34,14 @@ namespace BuildYourHead.Application.Services.Impl
             return _mapper.ToDto(entity);
         }
 
+        public ProductDto Update(ProductDto product)
+        {
+            var entity = _mapper.ToEntity(product);
+            _uow.Products.Update(entity);
+            _uow.Save();
+            return _mapper.ToDto(entity);
+        }
+
         public ProductDto Get(int id)
         {
             var entity = _uow.Products.Get(id);
@@ -47,7 +55,11 @@ namespace BuildYourHead.Application.Services.Impl
 
         public void AttachImage(int productId, string imagePath, bool primary)
         {
-            var entity = new ProductImageDbo { ImagePath = imagePath, ProductId = productId };
+            var entity = new ProductImageDbo { ImagePath = imagePath, ProductId = productId, IsPrimary = primary };
+            if (primary)
+            {
+                _uow.ProductImages.ResetPrimary(productId);
+            }
             _uow.ProductImages.Create(entity);
             _uow.Save();
         }
@@ -64,6 +76,22 @@ namespace BuildYourHead.Application.Services.Impl
             _uow.Save();
 
             _imageStorage.Delete(imagesPaths);
+        }
+
+        public byte[]? GetPrimaryImage(int id)
+        {
+            var productImageEntity = _uow.ProductImages.GetPrimaryImage(id);
+            if (productImageEntity == null)
+            {
+                return null;
+            }
+            var path = productImageEntity.ImagePath;
+            var image = _imageStorage.Get(path);
+            if (image == null)
+            {
+                throw new NotFoundException($"Image '{path}' not found");
+            }
+            return image.Content;
         }
     }
 }

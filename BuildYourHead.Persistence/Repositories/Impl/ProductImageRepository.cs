@@ -10,10 +10,19 @@ namespace BuildYourHead.Persistence.Repositories.Impl
 
         public IList<string> GetPaths(int productId)
         {
-            return DbSet
-                .Where(x => x.ProductId == productId)
-                .Select(x => x.ImagePath)
-                .ToImmutableList();
+            return DbSet.Where(x => x.ProductId == productId).Select(x => x.ImagePath).ToImmutableList();
+        }
+
+        public ProductImageDbo? GetPrimaryImage(int productId)
+        {
+            return DbSet.FirstOrDefault(x => x.ProductId == productId && x.IsPrimary);
+        }
+
+        public void ResetPrimary(int productId)
+        {
+            var entities = DbSet.Where(x => x.ProductId == productId).ToList();
+            entities.ForEach(x => x.IsPrimary = false);
+            DbSet.UpdateRange(entities);
         }
     }
 }

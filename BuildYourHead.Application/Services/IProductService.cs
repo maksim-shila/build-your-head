@@ -4,10 +4,12 @@ namespace BuildYourHead.Application.Services
 {
     public interface IProductService
     {
-        ProductDto Add(ProductDto product);
         ProductDto Get(int id);
+        ProductDto Add(ProductDto product);
+        ProductDto Update(ProductDto request);
         IList<ProductDto> GetAll();
-        void AttachImage(int productId, string imagePath, bool primary);
         void Delete(int id);
+        void AttachImage(int productId, string imagePath, bool primary);
+        byte[]? GetPrimaryImage(int id);
     }
 }

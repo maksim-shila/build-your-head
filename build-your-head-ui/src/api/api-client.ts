@@ -19,12 +19,14 @@ class ApiClient {
         get: (id: number): Promise<AxiosResponse<Product>> => axios.get(`/product/${id}`),
         getAll: (): Promise<AxiosResponse<Product[]>> => axios.get("/product"),
         put: (product: Product): Promise<AxiosResponse<Product>> => axios.put("/product", product),
+        post: (product: Product): Promise<AxiosResponse<Product>> => axios.post("/product", product),
         delete: (id: number): Promise<AxiosResponse> => axios.delete(`/product/${id}`),
-        attachImage: (productId: number, imagePath: string, primary = false): Promise<AxiosResponse> => axios.post(`/product/${productId}/image`, { imagePath, primary })
+        attachImage: (productId: number, imagePath: string, primary = false): Promise<AxiosResponse> => axios.post(`/product/${productId}/image`, { imagePath, primary }),
+        getPrimaryImage: (productId: number): Promise<AxiosResponse<string>> => axios.get(`/product/${productId}/image/primary`)
     }
 
     public readonly Image = {
-        post: (image: File): Promise<AxiosResponse<string>> => {
+        post: (image: Blob): Promise<AxiosResponse<string>> => {
             const formData = new FormData();
             formData.append("image", image)
             return axios.post("/image", formData, { headers: { "Content-Type": "multipart/form-data" } })

@@ -17,7 +17,7 @@ namespace BuildYourHead.Api.Controllers.Product
 
         [HttpGet]
         [Route("/api/product/")]
-        public ActionResult<IList<ProductDto>> Get()
+        public IActionResult Get()
         {
             var products = _productService.GetAll();
             return Ok(products);
@@ -25,15 +25,23 @@ namespace BuildYourHead.Api.Controllers.Product
 
         [HttpPut]
         [Route("/api/product/")]
-        public ActionResult<ProductDto> Put(ProductDto request)
+        public IActionResult Put(ProductDto request)
         {
             var product = _productService.Add(request);
             return Ok(product);
         }
 
+        [HttpPost]
+        [Route("/api/product/")]
+        public IActionResult Post(ProductDto request)
+        {
+            var product = _productService.Update(request);
+            return Ok(product);
+        }
+
         [HttpGet]
         [Route("/api/product/{id}")]
-        public ActionResult<ProductDto> Get([FromRoute] int id)
+        public IActionResult Get([FromRoute] int id)
         {
             var product = _productService.Get(id);
             return Ok(product);
@@ -41,7 +49,7 @@ namespace BuildYourHead.Api.Controllers.Product
 
         [HttpDelete]
         [Route("/api/product/{id}")]
-        public ActionResult Delete([FromRoute] int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             _productService.Delete(id);
             return Ok();
@@ -49,10 +57,18 @@ namespace BuildYourHead.Api.Controllers.Product
 
         [HttpPost]
         [Route("/api/product/{id}/image")]
-        public ActionResult PostImage([FromRoute] int id, [FromBody] PostImageRequest request)
+        public IActionResult PostImage([FromRoute] int id, [FromBody] PostImageRequest request)
         {
             _productService.AttachImage(id, request.ImagePath, request.Primary);
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("/api/product/{id}/image/primary")]
+        public IActionResult GetPrimaryImage([FromRoute] int id)
+        {
+            var image = _productService.GetPrimaryImage(id);
+            return Ok(image);
         }
     }
 }

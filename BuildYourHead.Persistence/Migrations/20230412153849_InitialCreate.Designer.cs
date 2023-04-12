@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BuildYourHead.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230412052646_InitialCreate")]
+    [Migration("20230412153849_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -61,6 +61,9 @@ namespace BuildYourHead.Persistence.Migrations
                     b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("IsPrimary")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");

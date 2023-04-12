@@ -6,8 +6,10 @@ import { AvatarUpload } from "./avatar-upload";
 
 interface ProductViewModalProps {
     isOpen: boolean,
+    product: Product | null,
     toggle: () => void,
-    onChange: (product: Product) => Promise<unknown>
+    onSubmit: (product: Product) => Promise<unknown>,
+    onClose: () => unknown
 }
 
 const defaults: Product = {
@@ -19,16 +21,44 @@ const defaults: Product = {
     nutrition: 0
 }
 
-export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, toggle, onChange }) => {
+export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, product, toggle, onSubmit, onClose }) => {
 
-    const [name, setName] = React.useState(defaults.name);
-    const [description, setDescription] = React.useState(defaults.name);
-    const [carbohydrates, setCarbohydrates] = React.useState(defaults.carbohydrates);
-    const [proteins, setProteins] = React.useState(defaults.proteins);
-    const [fats, setFats] = React.useState(defaults.fats);
-    const [nutrition, setNutrition] = React.useState(defaults.nutrition);
+    const [name, setName] = React.useState<string>(defaults.name);
+    const [description, setDescription] = React.useState<string>(defaults.description);
+    const [carbohydrates, setCarbohydrates] = React.useState<number>(defaults.carbohydrates);
+    const [proteins, setProteins] = React.useState<number>(defaults.proteins);
+    const [fats, setFats] = React.useState<number>(defaults.fats);
+    const [nutrition, setNutrition] = React.useState<number>(defaults.nutrition);
 
-    const [image, setImage] = React.useState<File | null>(null);
+    const [currentImage, setCurrentImage] = React.useState<string | null>(null);
+    const [image, setImage] = React.useState<Blob | null>(null);
+
+    React.useEffect(() => {
+        if (!isOpen || product === null) {
+            return;
+        }
+
+        fillProductData(product);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen, product]);
+
+    const fillProductData = useLoader(async (product: Product) => {
+        if (!product.id) {
+            return;
+        }
+
+        setName(product.name);
+        setDescription(product.description);
+        setCarbohydrates(product.carbohydrates);
+        setProteins(product.proteins);
+        setFats(product.fats);
+        setNutrition(product.nutrition);
+
+        const response = await $api.Product.getPrimaryImage(product.id);
+        if (response.data) {
+            setCurrentImage(response.data);
+        }
+    });
 
     const reset = () => {
         setName(defaults.name);
@@ -39,28 +69,50 @@ export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, togg
         setNutrition(defaults.nutrition);
 
         setImage(null);
+        setCurrentImage(null);
     }
 
-    const onSubmit = useLoader(async (event: React.FormEvent) => {
+    const handleSubmit = useLoader(async (event: React.FormEvent) => {
         event.preventDefault();
-        const product = { name, description, proteins, carbohydrates, fats, nutrition };
-        const createProductResult = await $api.Product.put(product);
-        const productId = createProductResult.data.id;
-        if (!productId) {
-            console.error("Failed to create product");
-            return;
-        }
-        if (image != null) {
-            const uploadImageResult = await $api.Image.post(image);
-            const imageId = uploadImageResult.data;
-            if (!imageId) {
-                console.error("Failed to upload image");
-            } else {
-                await $api.Product.attachImage(productId, imageId, true);
+        if (product == null) {
+            const newProduct = { name, description, proteins, carbohydrates, fats, nutrition };
+            const createProductResult = await $api.Product.put(newProduct);
+            const productId = createProductResult.data?.id;
+            if (!productId) {
+                console.error("Failed to create product");
+                return;
             }
+            if (image != null) {
+                const uploadImageResult = await $api.Image.post(image);
+                const imageId = uploadImageResult.data;
+                if (!imageId) {
+                    console.error("Failed to upload image");
+                } else {
+                    await $api.Product.attachImage(productId, imageId, true);
+                }
+            }
+            await onSubmit(createProductResult.data);
+            reset();
+        } else {
+            const updated = { id: product.id, name, description, proteins, carbohydrates, fats, nutrition };
+            const updateProductResult = await $api.Product.post(updated);
+            const productId = updateProductResult.data?.id;
+            if (!productId) {
+                console.error("Failed to update product");
+                return;
+            }
+            if (image != null) {
+                const uploadImageResult = await $api.Image.post(image);
+                const imageId = uploadImageResult.data;
+                if (!imageId) {
+                    console.error("Failed to upload image");
+                } else {
+                    await $api.Product.attachImage(productId, imageId, true);
+                }
+            }
+            await onSubmit(updateProductResult.data);
+            reset();
         }
-        await onChange(createProductResult.data);
-        reset();
     });
 
     const calculateNutrition = () => {
@@ -72,15 +124,16 @@ export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, togg
         <div>
             <Modal
                 isOpen={isOpen}
+                onClosed={() => { onClose(); reset(); }}
                 toggle={toggle}
                 size="lg"
             >
                 <ModalHeader toggle={toggle}>Add Product</ModalHeader>
                 <ModalBody>
-                    <Form onSubmit={onSubmit}>
+                    <Form onSubmit={handleSubmit}>
                         <Row>
                             <Col md={4}>
-                                <AvatarUpload onUpload={image => setImage(image)} />
+                                <AvatarUpload imageBase64={currentImage} onUpload={image => setImage(image)} />
                             </Col>
                             <Col>
                                 <FormGroup>
@@ -156,7 +209,7 @@ export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, togg
                     </Form>
                 </ModalBody>
                 <ModalFooter>
-                    <Button className="btn-success mt-4" onClick={onSubmit}>Add</Button>
+                    <Button className="btn-success mt-4" onClick={handleSubmit}>{product ? "Update" : "Add"}</Button>
                 </ModalFooter>
             </Modal>
         </div>

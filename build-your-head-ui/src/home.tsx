@@ -8,6 +8,7 @@ import { useLoader } from "./hooks/loader";
 export const Home = () => {
     const [products, setProducts] = React.useState<Product[]>([]);
     const [showProductDialog, setShowProductDialog] = React.useState(false);
+    const [product, setProduct] = React.useState<Product | null>(null);
 
     React.useEffect(() => {
         fetchProducts();
@@ -22,7 +23,8 @@ export const Home = () => {
     const toggleProductDialog = () => setShowProductDialog(!showProductDialog);
 
     const editProduct = (product: Product) => {
-
+        setProduct(product);
+        setShowProductDialog(true);
     }
 
     const deleteProduct = useLoader(async (product: Product) => {
@@ -46,11 +48,14 @@ export const Home = () => {
             </div>
             <ProductViewModal
                 isOpen={showProductDialog}
+                product={product}
                 toggle={toggleProductDialog}
-                onChange={async () => {
+                onSubmit={async () => {
                     setShowProductDialog(false);
+                    setProduct(null);
                     await fetchProducts();
                 }}
+                onClose={() => setProduct(null)}
             />
         </div>
     );
