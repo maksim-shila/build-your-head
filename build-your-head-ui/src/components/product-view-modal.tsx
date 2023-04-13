@@ -23,6 +23,8 @@ const defaults: Product = {
 
 export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, product, toggle, onSubmit, onClose }) => {
 
+    const isEditMode = product !== null;
+
     const [name, setName] = React.useState<string>(defaults.name);
     const [description, setDescription] = React.useState<string>(defaults.description);
     const [carbohydrates, setCarbohydrates] = React.useState<number>(defaults.carbohydrates);
@@ -74,45 +76,25 @@ export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, prod
 
     const handleSubmit = useLoader(async (event: React.FormEvent) => {
         event.preventDefault();
-        if (product == null) {
-            const newProduct = { name, description, proteins, carbohydrates, fats, nutrition };
-            const createProductResult = await $api.Product.put(newProduct);
-            const productId = createProductResult.data?.id;
-            if (!productId) {
-                console.error("Failed to create product");
-                return;
-            }
-            if (image != null) {
-                const uploadImageResult = await $api.Image.post(image);
-                const imageId = uploadImageResult.data;
-                if (!imageId) {
-                    console.error("Failed to upload image");
-                } else {
-                    await $api.Product.attachImage(productId, imageId, true);
-                }
-            }
-            await onSubmit(createProductResult.data);
-            reset();
-        } else {
-            const updated = { id: product.id, name, description, proteins, carbohydrates, fats, nutrition };
-            const updateProductResult = await $api.Product.post(updated);
-            const productId = updateProductResult.data?.id;
-            if (!productId) {
-                console.error("Failed to update product");
-                return;
-            }
-            if (image != null) {
-                const uploadImageResult = await $api.Image.post(image);
-                const imageId = uploadImageResult.data;
-                if (!imageId) {
-                    console.error("Failed to upload image");
-                } else {
-                    await $api.Product.attachImage(productId, imageId, true);
-                }
-            }
-            await onSubmit(updateProductResult.data);
-            reset();
+        const updatedProduct = { id: product?.id, name, description, proteins, carbohydrates, fats, nutrition };
+        const updateProductResponse = await (isEditMode ? $api.Product.post(updatedProduct) : $api.Product.put(updatedProduct));
+        const updatedProductId = updateProductResponse.data?.id;
+        if (!updatedProductId) {
+            console.error(`Failed to ${isEditMode ? "update" : "create"} product`);
+            return;
         }
+        if (image != null) {
+            const uploadImageResult = await $api.Image.post(image);
+            const imageId = uploadImageResult.data;
+            if (!imageId) {
+                console.error("Failed to upload image");
+            } else {
+                await $api.Product.attachImage(updatedProductId, imageId, true);
+            }
+        }
+
+        await onSubmit(updateProductResponse.data);
+        reset();
     });
 
     const calculateNutrition = () => {
