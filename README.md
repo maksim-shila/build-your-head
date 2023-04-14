@@ -5,3 +5,4 @@
 
 ## TODO:
     - fix too long blob
+    - use separated component with delayed unmount for product view
