@@ -1,9 +1,12 @@
-﻿using BuildYourHead.Infrastructure.ImageStorage;
+﻿using BuildYourHead.Application.Exceptions;
+using BuildYourHead.Infrastructure.ImageStorage;
+using System.Text;
 
 namespace BuildYourHead.Application.Services.Impl
 {
     public class ImageService : IImageService
     {
+        private static readonly Encoding Encoding = Encoding.ASCII;
         private readonly IImageStorage _storage;
 
         public ImageService(IImageStorage storage)
@@ -11,9 +14,25 @@ namespace BuildYourHead.Application.Services.Impl
             _storage = storage;
         }
 
-        public string Upload(byte[] image)
+        public void Delete(IList<string> imagesPaths)
         {
-            return _storage.Upload(image).Path;
+            _storage.Delete(imagesPaths);
+        }
+
+        public string Get(string path)
+        {
+            var image = _storage.Get(path);
+            if (image == null)
+            {
+                throw new NotFoundException($"Image {path} not found");
+            }
+            return Encoding.GetString(image.Content);
+        }
+
+        public string Upload(string imageBase64)
+        {
+            var bytes = Encoding.GetBytes(imageBase64);
+            return _storage.Upload(bytes).Path;
         }
     }
 }

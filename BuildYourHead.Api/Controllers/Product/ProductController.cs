@@ -32,9 +32,10 @@ namespace BuildYourHead.Api.Controllers.Product
         }
 
         [HttpPost]
-        [Route("/api/product/")]
-        public IActionResult Post(ProductDto request)
+        [Route("/api/product/{id}")]
+        public IActionResult Post([FromRoute] int id, [FromBody] ProductDto request)
         {
+            request.Id = id;
             var product = _productService.Update(request);
             return Ok(product);
         }

@@ -14,23 +14,25 @@ export interface Product {
     nutrition: number
 }
 
+interface AttachImageRequest {
+    productId: number,
+    imagePath: string,
+    primary: boolean
+}
+
 class ApiClient {
     public readonly Product = {
         get: (id: number): Promise<AxiosResponse<Product>> => axios.get(`/product/${id}`),
         getAll: (): Promise<AxiosResponse<Product[]>> => axios.get("/product"),
         put: (product: Product): Promise<AxiosResponse<Product>> => axios.put("/product", product),
-        post: (product: Product): Promise<AxiosResponse<Product>> => axios.post("/product", product),
+        post: (id: number, product: Product): Promise<AxiosResponse<Product>> => axios.post(`/product/${id}`, product),
         delete: (id: number): Promise<AxiosResponse> => axios.delete(`/product/${id}`),
-        attachImage: (productId: number, imagePath: string, primary = false): Promise<AxiosResponse> => axios.post(`/product/${productId}/image`, { imagePath, primary }),
+        attachImage: (req: AttachImageRequest): Promise<AxiosResponse> => axios.post(`/product/${req.productId}/image`, { imagePath: req.imagePath, primary: req.primary }),
         getPrimaryImage: (productId: number): Promise<AxiosResponse<string>> => axios.get(`/product/${productId}/image/primary`)
     }
 
     public readonly Image = {
-        post: (image: Blob): Promise<AxiosResponse<string>> => {
-            const formData = new FormData();
-            formData.append("image", image)
-            return axios.post("/image", formData, { headers: { "Content-Type": "multipart/form-data" } })
-        }
+        post: (imageBase64: string): Promise<AxiosResponse<string>> => axios.post("/image", imageBase64)
     }
 }
 

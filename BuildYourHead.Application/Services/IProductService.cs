@@ -10,6 +10,6 @@ namespace BuildYourHead.Application.Services
         IList<ProductDto> GetAll();
         void Delete(int id);
         void AttachImage(int productId, string imagePath, bool primary);
-        byte[]? GetPrimaryImage(int id);
+        string? GetPrimaryImage(int id);
     }
 }

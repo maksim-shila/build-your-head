@@ -1,10 +1,11 @@
+import React from "react"
 import { Button, ButtonGroup, Table } from "reactstrap";
-import { Product } from "../api/api-client";
+import { Product } from "../../../api/models/product";
 
 interface ProductsListProps {
-    products: Product[],
-    onEdit: (product: Product) => unknown;
-    onDelete: (product: Product) => unknown;
+    products: Product[];
+    onEdit: (product: Product) => unknown,
+    onDelete: (product: Product) => unknown
 }
 
 export const ProductsList: React.FC<ProductsListProps> = ({ products, onEdit, onDelete }) => {

@@ -1,7 +1,6 @@
 ﻿using BuildYourHead.Application.Dto;
 using BuildYourHead.Application.Exceptions;
 using BuildYourHead.Application.Mappers;
-using BuildYourHead.Infrastructure.ImageStorage;
 using BuildYourHead.Persistence;
 using BuildYourHead.Persistence.Entities;
 
@@ -10,13 +9,13 @@ namespace BuildYourHead.Application.Services.Impl
     public class ProductService : IProductService
     {
         private readonly IProductMapper _mapper;
-        private readonly IImageStorage _imageStorage;
+        private readonly IImageService _imageService;
         private readonly IUnitOfWork _uow;
 
-        public ProductService(IProductMapper mapper, IImageStorage imageStorage, IUnitOfWork uow)
+        public ProductService(IProductMapper mapper, IImageService imageService, IUnitOfWork uow)
         {
             _mapper = mapper;
-            _imageStorage = imageStorage;
+            _imageService = imageService;
             _uow = uow;
         }
 
@@ -75,10 +74,10 @@ namespace BuildYourHead.Application.Services.Impl
             _uow.Products.Delete(entity);
             _uow.Save();
 
-            _imageStorage.Delete(imagesPaths);
+            _imageService.Delete(imagesPaths);
         }
 
-        public byte[]? GetPrimaryImage(int id)
+        public string? GetPrimaryImage(int id)
         {
             var productImageEntity = _uow.ProductImages.GetPrimaryImage(id);
             if (productImageEntity == null)
@@ -86,12 +85,7 @@ namespace BuildYourHead.Application.Services.Impl
                 return null;
             }
             var path = productImageEntity.ImagePath;
-            var image = _imageStorage.Get(path);
-            if (image == null)
-            {
-                throw new NotFoundException($"Image '{path}' not found");
-            }
-            return image.Content;
+            return _imageService.Get(path);
         }
     }
 }
