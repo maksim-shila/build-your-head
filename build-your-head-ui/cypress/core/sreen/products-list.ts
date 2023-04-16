@@ -11,10 +11,16 @@ export class ProductsList {
 
     public clickEdit(product: Product): ProductForm {
         this.row(product.name).within(_ => {
-            cy.contains("button", "Edit").click();
+            cy.contains("button", /^Edit$/).click();
         });
 
         return this.productForm;
+    }
+
+    public clickDelete(product: Product) {
+        this.row(product.name).within(_ => {
+            cy.contains("button", /^Delete$/).click();
+        });
     }
 
     public shouldHaveProduct(product: Product): ProductsList {
@@ -29,7 +35,6 @@ export class ProductsList {
 
         return this;
     }
-
 
     public shouldNotHaveProduct(product: Product): ProductsList {
         cy.log(`Verify table hasn't product: ${product.name}`);

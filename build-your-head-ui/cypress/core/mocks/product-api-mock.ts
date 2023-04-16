@@ -36,7 +36,16 @@ export class ProductApiMock {
                 this.products[index] = product;
                 req.reply(product);
             }
-        ).as("POST /product");
+        ).as("POST /product/{id}");
+
+        cy.intercept(
+            { method: "DELETE", url: "/api/product/*" },
+            (req) => {
+                const id = Number(req.url.split("/").pop());
+                this.products = this.products.filter(p => p.id !== id);
+                req.reply("");
+            }
+        ).as("POST /product/{id}");
     }
 
     public addProduct(product: Product): Product {

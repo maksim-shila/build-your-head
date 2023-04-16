@@ -3,7 +3,7 @@ import { Product } from "../../../core/models/product";
 import { HomePage } from "../../../core/sreen/home-page";
 import { Guid } from "../../../core/utils/guid";
 
-describe("Products manipulations", () => {
+describe("Products Create/Update/Delete", () => {
 
     const homePage = new HomePage();
     const productApi = new ProductApiMock();
@@ -12,7 +12,7 @@ describe("Products manipulations", () => {
         productApi.setUp();
     });
 
-    it("User adds product -> new product created", () => {
+    it("Add product -> new product created", () => {
         // Arrange
         const product: Product = {
             name: Guid.next(),
@@ -34,7 +34,7 @@ describe("Products manipulations", () => {
         homePage.productsList.shouldHaveProduct(product);
     });
 
-    it("User edit product -> product info changed", () => {
+    it("Edit product -> product info changed", () => {
         // Arrange
         const productName = Guid.next();
         const product: Product = {
@@ -67,4 +67,26 @@ describe("Products manipulations", () => {
         homePage.productsList.shouldHaveProduct(updatedProduct);
         homePage.productsList.shouldNotHaveProduct(product);
     });
+
+    it("Delete product -> product removed from list", () => {
+        // Arrange
+        const product: Product = {
+            name: Guid.next(),
+            description: "New Description",
+            carbohydrates: 1,
+            fats: 2,
+            proteins: 3,
+            nutrition: 4
+        };
+        productApi.addProduct(product);
+
+        // Act
+        homePage
+            .open()
+            .productsList
+            .clickDelete(product);
+
+        // Assert
+        homePage.productsList.shouldNotHaveProduct(product);
+    })
 })
