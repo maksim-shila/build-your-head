@@ -37,7 +37,12 @@ export const ProductsPage: React.FC = () => {
     }
 
     const handleSubmit = async (data: ProductFormData) => {
-        const isEdit = activeProduct?.id !== null && activeProduct?.id !== undefined;
+        const isEdit = activeProduct !== null;
+        if (isEdit && !activeProduct.id) {
+            console.error("Edited product hasn't id");
+            return;
+        }
+
         const { imageBase64, imageChanged, ...product } = data;
         const response = await (isEdit ? $api.Product.post(activeProduct.id!, product) : $api.Product.put(product));
         const productId = response.data?.id;
