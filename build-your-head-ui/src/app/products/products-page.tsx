@@ -16,6 +16,7 @@ export const ProductsPage: React.FC = () => {
 
     React.useEffect(() => {
         fetchProducts();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const fetchProducts = useLoader(async (): Promise<void> => {
