@@ -7,7 +7,7 @@ export class HomePage {
     public readonly productsList: ProductsList;
 
     constructor() {
-        this.productForm = new ProductForm()
+        this.productForm = new ProductForm();
         this.productsList = new ProductsList();
     }
 
