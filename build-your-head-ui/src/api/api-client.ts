@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse, CreateAxiosDefaults } from "axios";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -20,21 +20,46 @@ interface AttachImageRequest {
     primary: boolean
 }
 
-class ApiClient {
+export class ApiClient {
+
+    private readonly api: AxiosInstance;
+
+    constructor(token: string | null | undefined) {
+        const config: CreateAxiosDefaults = {
+            baseURL: process.env.REACT_APP_API_URL,
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                get: {
+                    "Accept": "application/json"
+                },
+                post: {
+                    "Content-Type": "application/json"
+                },
+                put: {
+                    "Content-Type": "application/json"
+                }
+            }
+        }
+        this.api = axios.create(config);
+    }
+
+    public login = async (userName: string): Promise<string> => {
+        const response = await axios.get(`/login/${userName}`);
+        const token = response.data;
+        return token;
+    }
+
     public readonly Product = {
-        get: (id: number): Promise<AxiosResponse<Product>> => axios.get(`/product/${id}`),
-        getAll: (): Promise<AxiosResponse<Product[]>> => axios.get("/product"),
-        put: (product: Product): Promise<AxiosResponse<Product>> => axios.put("/product", product),
-        post: (id: number, product: Product): Promise<AxiosResponse<Product>> => axios.post(`/product/${id}`, product),
-        delete: (id: number): Promise<AxiosResponse> => axios.delete(`/product/${id}`),
-        attachImage: (req: AttachImageRequest): Promise<AxiosResponse> => axios.post(`/product/${req.productId}/image`, { imagePath: req.imagePath, primary: req.primary }),
-        getPrimaryImage: (productId: number): Promise<AxiosResponse<string>> => axios.get(`/product/${productId}/image/primary`)
+        get: (id: number): Promise<AxiosResponse<Product>> => this.api.get(`/product/${id}`),
+        getAll: (): Promise<AxiosResponse<Product[]>> => this.api.get("/product"),
+        put: (product: Product): Promise<AxiosResponse<Product>> => this.api.put("/product", product),
+        post: (id: number, product: Product): Promise<AxiosResponse<Product>> => this.api.post(`/product/${id}`, product),
+        delete: (id: number): Promise<AxiosResponse> => this.api.delete(`/product/${id}`),
+        attachImage: (req: AttachImageRequest): Promise<AxiosResponse> => this.api.post(`/product/${req.productId}/image`, { imagePath: req.imagePath, primary: req.primary }),
+        getPrimaryImage: (productId: number): Promise<AxiosResponse<string>> => this.api.get(`/product/${productId}/image/primary`)
     }
 
     public readonly Image = {
-        post: (imageBase64: string): Promise<AxiosResponse<string>> => axios.post("/image", imageBase64)
+        post: (imageBase64: string): Promise<AxiosResponse<string>> => this.api.post("/image", imageBase64)
     }
 }
-
-const $api = new ApiClient();
-export default $api;

@@ -9,6 +9,9 @@ namespace BuildYourHead.Api
             var builder = WebApplication.CreateBuilder(args);
             var configuration = builder.Configuration;
 
+            builder.Services.AddCustomAuthentication();
+            builder.Services.AddAuthorization();
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -30,16 +33,20 @@ namespace BuildYourHead.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            app.ApplyMigrations();
-            app.UseCustomMiddlewares();
+
             app.UseCors(builder =>
             {
                 builder.AllowAnyOrigin();
                 builder.AllowAnyMethod();
                 builder.AllowAnyHeader();
             });
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.ApplyMigrations();
+            app.UseCustomMiddlewares();
             app.MapControllers();
-            app.UseStaticFiles();
 
             app.Run();
         }

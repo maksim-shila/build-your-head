@@ -1,8 +1,8 @@
-import React, { FormEvent } from "react"
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap"
-import $api from "../../../api/api-client"
-import { Product } from "../../../api/models/product"
-import { ProductForm, ProductFormData } from "./product-form"
+import React, { FormEvent } from "react";
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
+import { Product } from "../../../../api/api-client";
+import { GlobalContext } from "../../../context/GlobalContext";
+import { ProductForm, ProductFormData } from "./product-form";
 
 interface ProductViewModalProps {
     isOpen: boolean,
@@ -26,6 +26,7 @@ export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, togg
 
     const isEdit = product !== null;
 
+    const { $api } = React.useContext(GlobalContext);
     const [data, setData] = React.useState<ProductFormData>(defaultData);
 
     React.useEffect(() => {
@@ -50,6 +51,7 @@ export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, togg
             }
             setData(data);
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen, product])
 
     const fetchImage = async (productId: number): Promise<string | null> => {

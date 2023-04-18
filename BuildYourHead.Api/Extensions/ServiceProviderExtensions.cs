@@ -1,10 +1,14 @@
-﻿using BuildYourHead.Application.Mappers;
+﻿using BuildYourHead.Api.Options;
+using BuildYourHead.Application.Mappers;
 using BuildYourHead.Application.Mappers.Impl;
 using BuildYourHead.Application.Services;
 using BuildYourHead.Application.Services.Impl;
 using BuildYourHead.Infrastructure.ImageStorage;
 using BuildYourHead.Persistence;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BuildYourHead.Api.Extensions
 {
@@ -41,6 +45,25 @@ namespace BuildYourHead.Api.Extensions
         public static void AddOptions(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<ImageStorageOptions>(configuration.GetSection("ImageStorage"));
+        }
+
+        public static void AddCustomAuthentication(this IServiceCollection services)
+        {
+            services
+                .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = AuthOptions.Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = AuthOptions.Audience,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true,
+                    };
+                });
         }
     }
 }

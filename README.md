@@ -4,4 +4,8 @@
     dotnet-ef --startup-project ../BuildYourHead.Api/ migrations add InitialCreate
 
 ## TODO:
-    - fix too long blob
+    - [back] Implement users storage
+    - [front] fix too long blob (compress images on upload)
+    - [front] add error handling (notifications)
+    - [front] add layout with nav bar and user info
+    - [front] set up formatter

@@ -1,10 +1,12 @@
 ﻿using BuildYourHead.Api.Controllers.Product.Requests;
 using BuildYourHead.Application.Dto;
 using BuildYourHead.Application.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BuildYourHead.Api.Controllers.Product
 {
+    [Authorize]
     [ApiController]
     public class ProductController : Controller
     {

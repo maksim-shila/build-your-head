@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from "react";
 import { Button, Col, Form, FormGroup, Input, InputGroup, Label, Row } from "reactstrap"
-import { AvatarUpload } from "../../common/avatar-upload";
+import { AvatarUpload } from "../../../common/avatar-upload";
 
 export interface ProductFormData {
     name: string,

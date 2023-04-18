@@ -1,9 +1,5 @@
-import { ProductsPage } from "./app/products/products-page";
-
-export const Home = () => {
+export const Home: React.FC = () => {
     return (
-        <div>
-            <ProductsPage />
-        </div>
+        <div>What a wonderful world</div>
     );
 }
