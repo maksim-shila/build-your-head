@@ -1,6 +1,6 @@
-import { ProductsPage } from "./app/products/products-page";
+import { ProductsPage } from "./app/pages/products/products-page";
 
-export const Home = () => {
+export const Home: React.FC = () => {
     return (
         <div>
             <ProductsPage />

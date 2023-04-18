@@ -1,6 +1,6 @@
-import React from "react"
+import React from "react";
 import { Button, ButtonGroup, Table } from "reactstrap";
-import { Product } from "../../../api/models/product";
+import { Product } from "../../../../api/api-client";
 
 interface ProductsListProps {
     products: Product[];

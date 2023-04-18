@@ -1,13 +1,15 @@
 import React from "react"
 import { Button } from "reactstrap";
-import $api from "../../api/api-client";
-import { Product } from "../../api/models/product";
-import { useLoader } from "../../hooks/loader";
+import { Product } from "../../../api/api-client";
+import { useLoader } from "../../../hooks/loader";
+import { GlobalContext } from "../../context/GlobalContext";
 import { ProductFormData } from "./components/product-form";
 import { ProductViewModal } from "./components/product-view-modal";
 import { ProductsList } from "./components/products-list"
 
 export const ProductsPage: React.FC = () => {
+
+    const { $api, $user } = React.useContext(GlobalContext);
 
     const [products, setProducts] = React.useState<Product[]>([]);
 
@@ -17,7 +19,7 @@ export const ProductsPage: React.FC = () => {
     React.useEffect(() => {
         fetchProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [$user]);
 
     const fetchProducts = useLoader(async (): Promise<void> => {
         const response = await $api.Product.getAll();

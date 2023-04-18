@@ -5,3 +5,5 @@
 
 ## TODO:
     - fix too long blob
+    - add error handling on front (notifications)
+    - add layout with nav bar and user info
