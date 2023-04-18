@@ -1,12 +1,13 @@
 import React, { ChangeEvent, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Col, Form, Input, Row } from "reactstrap";
 import { useLoader } from "../../../hooks/loader";
 import { GlobalContext } from "../../context/GlobalContext"
 
-export const LoginPage: React.FC = () => {
+export const LoginPage: React.FC = (props) => {
 
+    const navigate = useNavigate();
     const { login } = React.useContext(GlobalContext);
-
     const [userName, setUserName] = React.useState("");
 
     const handleUserNameChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -17,10 +18,11 @@ export const LoginPage: React.FC = () => {
     const handleSubmit = useLoader(async (e: FormEvent) => {
         e.preventDefault();
         await login(userName);
+        navigate("/");
     })
 
     return (
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <Row>
                 <Col md={3} />
                 <Col md={3}>

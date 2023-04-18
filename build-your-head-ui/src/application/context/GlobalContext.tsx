@@ -64,12 +64,12 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({ ch
         setApiClient(new ApiClient(token));
     }
 
-    const logout = () => {
+    const logout = useLoader(async () => {
         Cookies.remove("user_name");
         Cookies.remove("token");
         setUser(null);
         setApiClient(new ApiClient(null));
-    }
+    })
 
     return (
         <GlobalContext.Provider value={{
