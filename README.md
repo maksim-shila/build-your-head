@@ -1,7 +1,10 @@
-# Useful Commands
+# Build Your Head
 
-## EF:
+## Useful Commands
+
+### EF:
     dotnet-ef --startup-project ../BuildYourHead.Api/ migrations add InitialCreate
+
 
 ## TODO:
     - [back] Implement users storage
@@ -9,3 +12,4 @@
     - [front] add error handling (notifications)
     - [front] add layout with nav bar and user info
     - [front] set up formatter
+    - [front] add logout
