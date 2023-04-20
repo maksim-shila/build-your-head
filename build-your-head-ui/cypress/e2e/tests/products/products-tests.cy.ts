@@ -1,11 +1,11 @@
 import { ProductApiMock } from "../../../core/mocks/product-api-mock";
 import { Product } from "../../../core/models/product";
-import { HomePage } from "../../../core/sreen/home-page";
+import { ProductsPage } from "../../../core/sreen/product/products-page";
 import { Guid } from "../../../core/utils/guid";
 
 describe("Products Create/Update/Delete", () => {
 
-    const homePage = new HomePage();
+    const productsPage = new ProductsPage();
     const productApi = new ProductApiMock();
 
     beforeEach("Mock Products API", () => {
@@ -24,14 +24,14 @@ describe("Products Create/Update/Delete", () => {
         };
 
         // Act
-        homePage
+        productsPage
             .open()
             .clickAddProduct()
             .fill(product)
             .clickAdd();
 
         // Assert
-        homePage.productsList.shouldHaveProduct(product);
+        productsPage.productsList.shouldHaveProduct(product);
     });
 
     it("Edit product -> product info changed", () => {
@@ -56,7 +56,7 @@ describe("Products Create/Update/Delete", () => {
         productApi.addProduct(product);
 
         // Act
-        homePage
+        productsPage
             .open()
             .productsList
             .clickEdit(product)
@@ -64,8 +64,8 @@ describe("Products Create/Update/Delete", () => {
             .clickUpdate();
 
         // Assert
-        homePage.productsList.shouldHaveProduct(updatedProduct);
-        homePage.productsList.shouldNotHaveProduct(product);
+        productsPage.productsList.shouldHaveProduct(updatedProduct);
+        productsPage.productsList.shouldNotHaveProduct(product);
     });
 
     it("Delete product -> product removed from list", () => {
@@ -81,12 +81,12 @@ describe("Products Create/Update/Delete", () => {
         productApi.addProduct(product);
 
         // Act
-        homePage
+        productsPage
             .open()
             .productsList
             .clickDelete(product);
 
         // Assert
-        homePage.productsList.shouldNotHaveProduct(product);
+        productsPage.productsList.shouldNotHaveProduct(product);
     })
 })
