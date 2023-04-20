@@ -10,6 +10,7 @@
 
 # cypress
 /coverage
+/cypress/screenshots
 /cypress/downloads
 /cypress/videos
 
