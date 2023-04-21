@@ -12,17 +12,17 @@ export const App = () => {
   return (
     <Loader>
       <GlobalContextProvider>
-        <NavBar />
-        <div id="app" className={`${styles.appContainer} container`}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <NavBar />
+          <div id="app" className={`${styles.appContainer} container`}>
             <Routes>
               <Route path="/" Component={Home} />
               <Route path="/products" Component={ProductsPage} />
               <Route path="/login" Component={LoginPage} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
-          </BrowserRouter>
-        </div>
+          </div>
+        </BrowserRouter>
       </GlobalContextProvider >
     </Loader>
   );
