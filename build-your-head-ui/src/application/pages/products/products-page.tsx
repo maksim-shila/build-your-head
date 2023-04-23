@@ -6,8 +6,11 @@ import { GlobalContext } from "../../context/GlobalContext";
 import { ProductFormData } from "./components/product-form";
 import { ProductViewModal } from "./components/product-view-modal";
 import { ProductsList } from "./components/products-list"
+import { useTitle } from "../../../hooks/use-title";
 
 export const ProductsPage: React.FC = () => {
+
+    useTitle("Products");
 
     const { $api, $user } = React.useContext(GlobalContext);
 

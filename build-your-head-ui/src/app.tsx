@@ -7,6 +7,7 @@ import { LoginPage } from "./application/pages/login/LoginPage";
 import { Home } from "./home";
 import { Loader } from "./hooks/loader";
 import { ProductsPage } from "./application/pages/products/products-page";
+import { DishesPage } from "./application/pages/dishes/dishes-page";
 
 export const App = () => {
   return (
@@ -18,6 +19,7 @@ export const App = () => {
             <Routes>
               <Route path="/" Component={Home} />
               <Route path="/products" Component={ProductsPage} />
+              <Route path="/dishes" Component={DishesPage} />
               <Route path="/login" Component={LoginPage} />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
