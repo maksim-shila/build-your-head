@@ -6,7 +6,7 @@ namespace BuildYourHead.Application.Services
     {
         ProductDto Get(int id);
         ProductDto Add(ProductDto product);
-        ProductDto Update(ProductDto request);
+        ProductDto Update(ProductDto product);
         IList<ProductDto> GetAll();
         void Delete(int id);
         void AttachImage(int productId, string imagePath, bool primary);

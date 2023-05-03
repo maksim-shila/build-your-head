@@ -1,12 +1,13 @@
-﻿using BuildYourHead.Api.Options;
-using BuildYourHead.Application.Mappers;
+﻿using BuildYourHead.Api.Controllers;
+using BuildYourHead.Api.Options;
 using BuildYourHead.Application.Mappers.Impl;
+using BuildYourHead.Application.Mappers.Interfaces;
 using BuildYourHead.Application.Services;
 using BuildYourHead.Application.Services.Impl;
 using BuildYourHead.Infrastructure.ImageStorage;
+using BuildYourHead.Infrastructure.ImageStorage.Db;
 using BuildYourHead.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -22,11 +23,18 @@ namespace BuildYourHead.Api.Extensions
         public static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IDishService, DishService>();
 
             services.AddTransient<IImageStorage, DbImageStorage>();
             services.AddTransient<IImageService, ImageService>();
 
             services.AddTransient<IProductMapper, ProductMapper>();
+            services.AddTransient<IDishMapper, DishMapper>();
+        }
+
+        public static void AddRequestHandlers(this IServiceCollection services)
+        {
+            services.AddTransientAllChildrenOf<IRequestHandler>();
         }
 
         public static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
@@ -64,6 +72,19 @@ namespace BuildYourHead.Api.Extensions
                         ValidateIssuerSigningKey = true,
                     };
                 });
+        }
+
+        private static void AddTransientAllChildrenOf<T>(this IServiceCollection services)
+        {
+            var parentType = typeof(T);
+            var types = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(s => s.GetTypes())
+                .Where(t => t != parentType && parentType.IsAssignableFrom(t))
+                .ToList();
+            foreach (var type in types)
+            {
+                services.AddTransient(type);
+            }
         }
     }
 }

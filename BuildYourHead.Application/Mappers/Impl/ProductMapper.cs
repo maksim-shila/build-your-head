@@ -1,14 +1,14 @@
 ﻿using BuildYourHead.Application.Dto;
+using BuildYourHead.Application.Mappers.Interfaces;
 using BuildYourHead.Persistence.Entities;
-using System.Collections.Immutable;
 
 namespace BuildYourHead.Application.Mappers.Impl
 {
     public class ProductMapper : IProductMapper
     {
-        public ProductDbo ToEntity(ProductDto dto)
+        public ProductEntity ToEntity(ProductDto dto)
         {
-            return new ProductDbo
+            return new ProductEntity
             {
                 Id = dto.Id,
                 Name = dto.Name,
@@ -20,7 +20,7 @@ namespace BuildYourHead.Application.Mappers.Impl
             };
         }
 
-        public ProductDto ToDto(ProductDbo entity)
+        public ProductDto ToDto(ProductEntity entity)
         {
             return new ProductDto
             {
@@ -32,16 +32,6 @@ namespace BuildYourHead.Application.Mappers.Impl
                 Carbohydrates = entity.Carbohydrates,
                 Nutrition = entity.Nutrition
             };
-        }
-
-        public IList<ProductDto> ToDtos(IEnumerable<ProductDbo> entities)
-        {
-            return entities.Select(ToDto).ToImmutableList();
-        }
-
-        public IList<ProductDbo> ToEntities(IEnumerable<ProductDto> dtos)
-        {
-            return dtos.Select(ToEntity).ToImmutableList();
         }
     }
 }

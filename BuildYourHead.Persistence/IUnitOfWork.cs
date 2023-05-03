@@ -6,7 +6,7 @@ namespace BuildYourHead.Persistence
     {
         IProductRepository Products { get; }
         IProductImageRepository ProductImages { get; }
-
+        IDishRepository Dishes { get; }
         void Save();
     }
 }

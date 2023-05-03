@@ -1,0 +1,8 @@
+﻿using BuildYourHead.Persistence.Entities;
+
+namespace BuildYourHead.Persistence.Repositories.Interfaces
+{
+    public interface IDishRepository : IRepository<DishEntity, int>
+    {
+    }
+}

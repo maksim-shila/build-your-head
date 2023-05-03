@@ -2,7 +2,7 @@
 
 namespace BuildYourHead.Persistence.Repositories.Interfaces
 {
-    public interface IProductRepository : IRepository<ProductDbo, int>
+    public interface IProductRepository : IRepository<ProductEntity, int>
     {
     }
 }

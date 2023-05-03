@@ -7,6 +7,16 @@ namespace BuildYourHead.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            ConfigureBuilder(builder);
+
+            var app = builder.Build();
+            ConfigureApplication(app);
+
+            app.Run();
+        }
+
+        private static void ConfigureBuilder(WebApplicationBuilder builder)
+        {
             var configuration = builder.Configuration;
 
             builder.Services.AddCustomAuthentication();
@@ -21,13 +31,16 @@ namespace BuildYourHead.Api
             builder.Services.AddOptions(configuration);
             builder.Services.AddPersistence();
             builder.Services.AddApplicationServices();
+            builder.Services.AddRequestHandlers();
 
             if (builder.Environment.IsDevelopment())
             {
                 builder.Logging.AddConsole();
             }
+        }
 
-            var app = builder.Build();
+        private static void ConfigureApplication(WebApplication app)
+        {
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -46,9 +59,15 @@ namespace BuildYourHead.Api
 
             app.ApplyMigrations();
             app.UseCustomMiddlewares();
-            app.MapControllers();
 
-            app.Run();
+            if (app.Environment.IsDevelopment())
+            {
+                app.MapControllers().AllowAnonymous();
+            }
+            else
+            {
+                app.MapControllers();
+            }
         }
     }
 }

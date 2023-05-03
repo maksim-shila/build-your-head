@@ -1,6 +1,6 @@
 ﻿using BuildYourHead.Application.Dto;
 using BuildYourHead.Application.Exceptions;
-using BuildYourHead.Application.Mappers;
+using BuildYourHead.Application.Mappers.Interfaces;
 using BuildYourHead.Persistence;
 using BuildYourHead.Persistence.Entities;
 
@@ -28,9 +28,9 @@ namespace BuildYourHead.Application.Services.Impl
         public ProductDto Add(ProductDto product)
         {
             var entity = _mapper.ToEntity(product);
-            _uow.Products.Create(entity);
+            var created = _uow.Products.Create(entity);
             _uow.Save();
-            return _mapper.ToDto(entity);
+            return _mapper.ToDto(created);
         }
 
         public ProductDto Update(ProductDto product)
@@ -54,10 +54,10 @@ namespace BuildYourHead.Application.Services.Impl
 
         public void AttachImage(int productId, string imagePath, bool primary)
         {
-            var entity = new ProductImageDbo { ImagePath = imagePath, ProductId = productId, IsPrimary = primary };
+            var entity = new ProductImageEntity { ImagePath = imagePath, ProductId = productId, IsPrimary = primary };
             if (primary)
             {
-                _uow.ProductImages.ResetPrimary(productId);
+                _uow.ProductImages.ResetPrimaryImage(productId);
             }
             _uow.ProductImages.Create(entity);
             _uow.Save();

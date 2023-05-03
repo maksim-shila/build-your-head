@@ -1,24 +1,14 @@
 import React, { ChangeEvent } from "react";
 import { Button, Col, Form, FormGroup, Input, InputGroup, Label, Row } from "reactstrap"
 import { AvatarUpload } from "../../../common/avatar-upload";
+import { ProductFormData } from "../models/product-form-data";
 
-export interface ProductFormData {
-    name: string,
-    description: string,
-    proteins: number,
-    carbohydrates: number,
-    fats: number,
-    nutrition: number,
-    imageBase64: string | null,
-    imageChanged: boolean
-}
-
-interface ProductFormProps {
+interface Props {
     data: ProductFormData,
     onChange: (data: ProductFormData) => unknown
 }
 
-export const ProductForm: React.FC<ProductFormProps> = ({ data, onChange }) => {
+export const ProductForm: React.FC<Props> = ({ data, onChange }) => {
 
     const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         onChange({ ...data, name: e.target.value });

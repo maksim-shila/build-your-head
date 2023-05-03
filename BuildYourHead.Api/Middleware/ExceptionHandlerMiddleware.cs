@@ -1,4 +1,5 @@
-﻿using BuildYourHead.Application.Exceptions;
+﻿using BuildYourHead.Api.Exceptions;
+using BuildYourHead.Application.Exceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -38,9 +39,13 @@ namespace BuildYourHead.Api.Middleware
                     statusCode = (int)HttpStatusCode.NotFound;
                     message = exception.Message;
                     break;
+                case ValidationException _:
+                    statusCode = (int)HttpStatusCode.BadRequest;
+                    message = exception.Message;
+                    break;
                 default:
                     statusCode = (int)HttpStatusCode.InternalServerError;
-                    message = "Internal Server Error";
+                    message = "Unknown Error";
                     break;
             }
 

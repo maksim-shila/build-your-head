@@ -1,18 +1,9 @@
 import axios, { AxiosInstance, AxiosResponse, CreateAxiosDefaults } from "axios";
+import { Dish, Product } from "./models";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers.put["Content-Type"] = "application/json";
-
-export interface Product {
-    id?: number,
-    name: string,
-    description: string,
-    proteins: number,
-    carbohydrates: number,
-    fats: number,
-    nutrition: number
-}
 
 interface AttachImageRequest {
     productId: number,
@@ -49,6 +40,14 @@ export class ApiClient {
         return token;
     }
 
+    public readonly Dish = {
+        get: (id: number): Promise<AxiosResponse<Dish>> => this.api.get(`/dish/${id}`),
+        getAll: (): Promise<AxiosResponse<Dish[]>> => this.api.get("/dish"),
+        put: (dish: Dish): Promise<AxiosResponse<Dish>> => this.api.put("/dish", dish),
+        post: (id: number, dish: Dish): Promise<AxiosResponse<Dish>> => this.api.post(`/dish/${id}`, dish),
+        delete: (id: number): Promise<AxiosResponse> => this.api.delete(`/dish/${id}`),
+    }
+
     public readonly Product = {
         get: (id: number): Promise<AxiosResponse<Product>> => this.api.get(`/product/${id}`),
         getAll: (): Promise<AxiosResponse<Product[]>> => this.api.get("/product"),
@@ -56,10 +55,10 @@ export class ApiClient {
         post: (id: number, product: Product): Promise<AxiosResponse<Product>> => this.api.post(`/product/${id}`, product),
         delete: (id: number): Promise<AxiosResponse> => this.api.delete(`/product/${id}`),
         attachImage: (req: AttachImageRequest): Promise<AxiosResponse> => this.api.post(`/product/${req.productId}/image`, { imagePath: req.imagePath, primary: req.primary }),
-        getPrimaryImage: (productId: number): Promise<AxiosResponse<string>> => this.api.get(`/product/${productId}/image/primary`)
+        getPrimaryImage: (productId: number): Promise<AxiosResponse<string>> => this.api.get(`/product/${productId}/image/primary`),
     }
 
     public readonly Image = {
-        post: (imageBase64: string): Promise<AxiosResponse<string>> => this.api.post("/image", imageBase64)
+        post: (imageBase64: string): Promise<AxiosResponse<string>> => this.api.post("/image", { imageBase64 })
     }
 }

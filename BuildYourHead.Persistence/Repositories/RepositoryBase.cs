@@ -11,29 +11,29 @@ namespace BuildYourHead.Persistence.Repositories
 
         protected DbSet<TEntity> DbSet { get; }
 
-        public TEntity? Get(TKey id)
+        public virtual TEntity? Get(TKey id)
         {
             return DbSet.Find(id);
         }
 
-        public IEnumerable<TEntity> Get()
+        public virtual IEnumerable<TEntity> Get()
         {
             return DbSet.ToList();
         }
 
-        public TEntity Create(TEntity entity)
+        public virtual TEntity Create(TEntity entity)
         {
             var entry = DbSet.Add(entity);
             return entry.Entity;
         }
 
-        public TEntity Update(TEntity entity)
+        public virtual TEntity Update(TEntity entity)
         {
             var entry = DbSet.Update(entity);
             return entry.Entity;
         }
 
-        public void Delete(TEntity entity)
+        public virtual void Delete(TEntity entity)
         {
             DbSet.Remove(entity);
         }
