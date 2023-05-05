@@ -1,5 +1,4 @@
 ﻿using BuildYourHead.Api.Controllers.Dish.Requests;
-using BuildYourHead.Api.Controllers.Product.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
