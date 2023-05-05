@@ -2,10 +2,10 @@
 
 namespace BuildYourHead.Persistence.Repositories.Interfaces
 {
-    public interface IProductImageRepository : IRepository<ProductImageDbo, int>
+    public interface IProductImageRepository : IRepository<ProductImageEntity, int>
     {
         IList<string> GetPaths(int productId);
-        ProductImageDbo? GetPrimaryImage(int productId);
-        void ResetPrimary(int productId);
+        ProductImageEntity? GetPrimaryImage(int productId);
+        void ResetPrimaryImage(int productId);
     }
 }

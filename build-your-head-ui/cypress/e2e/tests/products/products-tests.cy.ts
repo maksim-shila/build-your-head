@@ -28,7 +28,8 @@ describe("Products Create/Update/Delete", () => {
             .open()
             .clickAddProduct()
             .fill(product)
-            .clickAdd();
+            .clickAdd()
+            .shouldBeClosed();
 
         // Assert
         productsPage.productsList.shouldHaveProduct(product);
@@ -60,8 +61,10 @@ describe("Products Create/Update/Delete", () => {
             .open()
             .productsList
             .clickEdit(product)
+            .shouldBePrepopulated(product)
             .fill(updatedProduct)
-            .clickUpdate();
+            .clickUpdate()
+            .shouldBeClosed();
 
         // Assert
         productsPage.productsList.shouldHaveProduct(updatedProduct);

@@ -45,7 +45,7 @@ export class ProductApiMock {
                 this.products = this.products.filter(p => p.id !== id);
                 req.reply("");
             }
-        ).as("POST /product/{id}");
+        ).as("DELETE /product/{id}");
     }
 
     public addProduct(product: Product): Product {

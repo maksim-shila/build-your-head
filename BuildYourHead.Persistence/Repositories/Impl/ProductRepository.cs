@@ -3,7 +3,7 @@ using BuildYourHead.Persistence.Repositories.Interfaces;
 
 namespace BuildYourHead.Persistence.Repositories.Impl
 {
-    internal class ProductRepository : RepositoryBase<ProductDbo, int>, IProductRepository
+    internal class ProductRepository : RepositoryBase<ProductEntity, int>, IProductRepository
     {
         public ProductRepository(ApplicationContext context) : base(context) { }
     }

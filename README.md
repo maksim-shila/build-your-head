@@ -8,10 +8,11 @@
 ## Useful Commands
 
 ### EF:
-    dotnet-ef --startup-project ../BuildYourHead.Api/ migrations add InitialCreate
+    ~/buid-your-head/BuildYourHead.Persistence/ dotnet-ef --startup-project ../BuildYourHead.Api/ migrations add InitialCreate
 
 
 ## TODO:
+    - ADD BACKEND UNIT TESTS !!!!
     - [back] Implement users storage
     - [front] fix too long blob (compress images on upload)
     - [front] add error handling (notifications)

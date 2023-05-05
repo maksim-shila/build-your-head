@@ -1,15 +1,9 @@
 import React, { FormEvent } from "react";
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
-import { Product } from "../../../../api/api-client";
-import { GlobalContext } from "../../../context/GlobalContext";
-import { ProductForm, ProductFormData } from "./product-form";
-
-interface ProductViewModalProps {
-    isOpen: boolean,
-    toggle: () => unknown,
-    product: Product | null,
-    onSubmit: (product: ProductFormData) => unknown
-}
+import { Product } from "../../../../api/models";
+import { GlobalContext } from "../../../context/global-context";
+import { ProductForm } from "./product-form";
+import { ProductFormData } from "../models/product-form-data";
 
 const defaultData: ProductFormData = {
     name: "",
@@ -22,7 +16,14 @@ const defaultData: ProductFormData = {
     imageChanged: false
 }
 
-export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, toggle, product, onSubmit }) => {
+interface Props {
+    isOpen: boolean,
+    toggle: () => unknown,
+    product: Product | null,
+    onSubmit: (product: ProductFormData) => unknown
+}
+
+export const ProductViewModal: React.FC<Props> = ({ isOpen, toggle, product, onSubmit }) => {
 
     const isEdit = product !== null;
 
@@ -65,8 +66,8 @@ export const ProductViewModal: React.FC<ProductViewModalProps> = ({ isOpen, togg
     }
 
     return (
-        <Modal isOpen={isOpen} toggle={toggle} size="lg">
-            <ModalHeader toggle={toggle}>Add Product</ModalHeader>
+        <Modal id="productModal" isOpen={isOpen} toggle={toggle} size="lg">
+            <ModalHeader toggle={toggle}>{isEdit ? "Edit Product" : "Add Product"}</ModalHeader>
             <ModalBody>
                 <ProductForm data={data} onChange={setData} />
             </ModalBody>

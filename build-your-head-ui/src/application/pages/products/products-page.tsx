@@ -1,18 +1,18 @@
 import React from "react"
 import { Button } from "reactstrap";
-import { Product } from "../../../api/api-client";
+import { Product } from "../../../api/models";
 import { useLoader } from "../../../hooks/loader";
-import { GlobalContext } from "../../context/GlobalContext";
-import { ProductFormData } from "./components/product-form";
+import { GlobalContext } from "../../context/global-context";
 import { ProductViewModal } from "./components/product-view-modal";
 import { ProductsList } from "./components/products-list"
 import { useTitle } from "../../../hooks/use-title";
+import { ProductFormData } from "./models/product-form-data";
 
 export const ProductsPage: React.FC = () => {
 
     useTitle("Products");
 
-    const { $api, $user } = React.useContext(GlobalContext);
+    const { $api } = React.useContext(GlobalContext);
 
     const [products, setProducts] = React.useState<Product[]>([]);
 
@@ -22,7 +22,7 @@ export const ProductsPage: React.FC = () => {
     React.useEffect(() => {
         fetchProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [$user]);
+    }, []);
 
     const fetchProducts = useLoader(async (): Promise<void> => {
         const response = await $api.Product.getAll();
@@ -38,7 +38,7 @@ export const ProductsPage: React.FC = () => {
         if (isProductViewModalOpen) {
             setActiveProduct(null);
         }
-        setIsProductViewModalOpen(!isProductViewModalOpen);
+        setIsProductViewModalOpen(v => !v);
     }
 
     const handleSubmit = async (data: ProductFormData) => {
@@ -59,8 +59,8 @@ export const ProductsPage: React.FC = () => {
             await postImage(productId, imageBase64);
         }
 
-        setActiveProduct(null);
         setIsProductViewModalOpen(false);
+        setActiveProduct(null);
         await fetchProducts();
     }
 

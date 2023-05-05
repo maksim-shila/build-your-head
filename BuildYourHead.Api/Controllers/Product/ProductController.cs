@@ -1,6 +1,4 @@
 ﻿using BuildYourHead.Api.Controllers.Product.Requests;
-using BuildYourHead.Application.Dto;
-using BuildYourHead.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,68 +8,60 @@ namespace BuildYourHead.Api.Controllers.Product
     [ApiController]
     public class ProductController : Controller
     {
-        private IProductService _productService;
-
-        public ProductController(IProductService productService)
-        {
-            _productService = productService;
-        }
-
         [HttpGet]
         [Route("/api/product/")]
-        public IActionResult Get()
+        public IActionResult Get([FromServices] GetProductsRequestHandler handler)
         {
-            var products = _productService.GetAll();
-            return Ok(products);
+            var result = handler.Handle();
+            return Ok(result);
         }
 
         [HttpPut]
         [Route("/api/product/")]
-        public IActionResult Put(ProductDto request)
+        public IActionResult Put(AddProductRequest request, [FromServices] AddProductRequestHandler handler)
         {
-            var product = _productService.Add(request);
-            return Ok(product);
-        }
-
-        [HttpPost]
-        [Route("/api/product/{id}")]
-        public IActionResult Post([FromRoute] int id, [FromBody] ProductDto request)
-        {
-            request.Id = id;
-            var product = _productService.Update(request);
-            return Ok(product);
+            var result = handler.Handle(request);
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("/api/product/{id}")]
-        public IActionResult Get([FromRoute] int id)
+        public IActionResult Get([FromRoute] int id, [FromServices] GetProductRequestHandler handler)
         {
-            var product = _productService.Get(id);
-            return Ok(product);
+            var result = handler.Handle(id);
+            return Ok(result);
         }
+
+        [HttpPost]
+        [Route("/api/product/{id}")]
+        public IActionResult Post([FromRoute] int id, UpdateProductRequest request, [FromServices] UpdateProductRequestHandler handler)
+        {
+            var result = handler.Handle(id, request);
+            return Ok(result);
+        }        
 
         [HttpDelete]
         [Route("/api/product/{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        public IActionResult Delete([FromRoute] int id, [FromServices] DeleteProductRequestHandler handler)
         {
-            _productService.Delete(id);
-            return Ok();
+            var result = handler.Handle(id);
+            return Ok(result);
         }
 
         [HttpPost]
         [Route("/api/product/{id}/image")]
-        public IActionResult PostImage([FromRoute] int id, [FromBody] PostImageRequest request)
+        public IActionResult PostImage([FromRoute] int id, PostProductImageRequest request, [FromServices] PostProductImageRequestHandler handler)
         {
-            _productService.AttachImage(id, request.ImagePath, request.Primary);
-            return Ok();
+            var result = handler.Handle(id, request);
+            return Ok(result);
         }
 
         [HttpGet]
         [Route("/api/product/{id}/image/primary")]
-        public IActionResult GetPrimaryImage([FromRoute] int id)
+        public IActionResult GetPrimaryImage([FromRoute] int id, [FromServices] GetPrimaryImageRequestHandler handler)
         {
-            var image = _productService.GetPrimaryImage(id);
-            return Ok(image);
+            var result = handler.Handle(id);
+            return Ok(result);
         }
     }
 }

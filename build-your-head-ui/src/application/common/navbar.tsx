@@ -1,6 +1,6 @@
 import React from "react";
 import { Nav, Navbar as ReactstrapNavbar, NavbarBrand, NavItem, NavLink, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Row, Col } from "reactstrap";
-import { GlobalContext } from "../context/GlobalContext";
+import { GlobalContext } from "../context/global-context";
 import { useLoader } from "../../hooks/loader";
 import { useNavigate } from "react-router-dom";
 

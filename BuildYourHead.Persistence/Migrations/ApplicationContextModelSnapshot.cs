@@ -18,69 +18,146 @@ namespace BuildYourHead.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductDbo", b =>
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.DishEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<double>("Carbohydrates")
-                        .HasColumnType("double");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<double>("Fats")
-                        .HasColumnType("double");
+                        .HasColumnType("longtext")
+                        .HasColumnName("Description");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<double>("Nutrition")
-                        .HasColumnType("double");
-
-                    b.Property<double>("Proteins")
-                        .HasColumnType("double");
+                        .HasColumnType("longtext")
+                        .HasColumnName("Name");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Dish", (string)null);
                 });
 
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductImageDbo", b =>
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.DishProductEntity", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DishId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "DishId");
+
+                    b.HasIndex("DishId");
+
+                    b.ToTable("DishProduct", (string)null);
+                });
+
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    b.Property<double>("Carbohydrates")
+                        .HasColumnType("double")
+                        .HasColumnName("Carbohydrates");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("Description");
+
+                    b.Property<double>("Fats")
+                        .HasColumnType("double")
+                        .HasColumnName("Fats");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("Name");
+
+                    b.Property<double>("Nutrition")
+                        .HasColumnType("double")
+                        .HasColumnName("Nutrition");
+
+                    b.Property<double>("Proteins")
+                        .HasColumnType("double")
+                        .HasColumnName("Proteins");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Product", (string)null);
+                });
+
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductImageEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     b.Property<string>("ImagePath")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("longtext")
+                        .HasColumnName("ImagePath");
 
                     b.Property<bool>("IsPrimary")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("tinyint(1)")
+                        .HasColumnName("IsPrimary");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("ProductId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImage", (string)null);
                 });
 
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductImageDbo", b =>
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.DishProductEntity", b =>
                 {
-                    b.HasOne("BuildYourHead.Persistence.Entities.ProductDbo", "Product")
-                        .WithMany()
+                    b.HasOne("BuildYourHead.Persistence.Entities.DishEntity", "Dish")
+                        .WithMany("DishProducts")
+                        .HasForeignKey("DishId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BuildYourHead.Persistence.Entities.ProductEntity", "Product")
+                        .WithMany("DishProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Dish");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductImageEntity", b =>
+                {
+                    b.HasOne("BuildYourHead.Persistence.Entities.ProductEntity", "Product")
+                        .WithMany("Images")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.DishEntity", b =>
+                {
+                    b.Navigation("DishProducts");
+                });
+
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductEntity", b =>
+                {
+                    b.Navigation("DishProducts");
+
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }
