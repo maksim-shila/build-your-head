@@ -1,5 +1,4 @@
 import React from "react";
-import { useTitle } from "../../../hooks/use-title";
 import { Button } from "reactstrap";
 import { DishesList } from "./components/dishes-list";
 import { DishViewModal } from "./components/dish-view-modal";
@@ -7,18 +6,19 @@ import { DishFormData } from "./models/dish-form-data";
 import { GlobalContext } from "../../context/global-context";
 import { useLoader } from "../../../hooks/loader";
 import { Dish } from "../../../api/models";
+import { useNavigate } from "react-router-dom";
 
 export const DishesPage: React.FC = () => {
 
-    useTitle("Dishes");
-
     const { $api } = React.useContext(GlobalContext);
+    const navigate = useNavigate();
 
     const [dishes, setDishes] = React.useState<Dish[]>([]);
     const [activeDish, setActiveDish] = React.useState<Dish | null>(null);
     const [isDishViewModalOpen, setIsDishViewModalOpen] = React.useState(false);
 
     React.useEffect(() => {
+        document.title = "Dishes";
         fetchDishes();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -35,7 +35,7 @@ export const DishesPage: React.FC = () => {
         setIsDishViewModalOpen(true);
     }
 
-    const handleSubmit = async (data: DishFormData) => {
+    const handleSubmit = useLoader(async (data: DishFormData) => {
         const isEdit = activeDish !== null;
         if (isEdit && !activeDish.id) {
             console.error("Edited dish hasn't id");
@@ -49,11 +49,14 @@ export const DishesPage: React.FC = () => {
             console.error(`Failed to ${isEdit ? "update" : "create"} dish`);
             return;
         }
-
-        setActiveDish(null);
-        setIsDishViewModalOpen(false);
-        await fetchDishes();
-    }
+        if (isEdit) {
+            setActiveDish(null);
+            setIsDishViewModalOpen(false);
+            await fetchDishes();
+        } else {
+            navigate(`/dish/${dishId}`);
+        }
+    })
 
     const deleteDish = async (dish: Dish) => {
         if (!dish.id) {

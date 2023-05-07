@@ -3,15 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { Button, Col, Form, Input, Row } from "reactstrap";
 import { useLoader } from "../../../hooks/loader";
 import { GlobalContext } from "../../context/global-context"
-import { useTitle } from "../../../hooks/use-title";
 
 export const LoginPage: React.FC = (props) => {
-
-    useTitle("Login");
 
     const navigate = useNavigate();
     const { login } = React.useContext(GlobalContext);
     const [userName, setUserName] = React.useState("");
+
+    React.useEffect(() => {
+        document.title = "Login";
+    })
 
     const handleUserNameChange = (e: ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;

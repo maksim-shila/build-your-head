@@ -1,6 +1,7 @@
 import { DishApiMock } from "../../../core/mocks/dish-api-mock";
 import { Dish } from "../../../core/models/dish";
-import { DishesPage } from "../../../core/sreen/dish/dishes-page";
+import { DishPage } from "../../../core/sreen/dish/dish-page";
+import { DishesPage } from "../../../core/sreen/dishes/dishes-page";
 import { Guid } from "../../../core/utils/guid";
 
 describe("Dishes Create/Update/Delete", () => {
@@ -24,22 +25,25 @@ describe("Dishes Create/Update/Delete", () => {
             .open()
             .clickAddDish()
             .fill(dish)
-            .clickAdd()
-            .shouldBeClosed();
+            .clickAdd();
 
         // Assert
-        dishesPage.dishesList.shouldHaveDish(dish);
+        new DishPage(dish).shouldBeOpened();
+        dishesPage
+            .open()
+            .dishesList
+            .shouldHaveDish(dish);
     });
 
     it("Edit dish -> dish info changed", () => {
         // Arrange
-        const productName = Guid.next();
+        const dishName = Guid.next();
         const dish: Dish = {
-            name: productName,
+            name: dishName,
             description: "New Description"
         };
         const updatedDish: Dish = {
-            name: productName + " Updated",
+            name: dishName + " Updated",
             description: "Updated Description"
         }
         dishesApi.addDish(dish);
@@ -76,4 +80,22 @@ describe("Dishes Create/Update/Delete", () => {
         // Assert
         dishesPage.dishesList.shouldNotHaveDish(dish);
     })
+
+    it("View dish -> dish page opened", () => {
+        // Arrange
+        const dish: Dish = {
+            name: Guid.next(),
+            description: "New Description"
+        };
+        dishesApi.addDish(dish);
+
+        // Act
+        const dishPage = dishesPage
+            .open()
+            .dishesList
+            .clickView(dish);
+
+        // Assert
+        dishPage.shouldBeOpened();
+    });
 })

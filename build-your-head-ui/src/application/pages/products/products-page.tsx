@@ -5,12 +5,9 @@ import { useLoader } from "../../../hooks/loader";
 import { GlobalContext } from "../../context/global-context";
 import { ProductViewModal } from "./components/product-view-modal";
 import { ProductsList } from "./components/products-list"
-import { useTitle } from "../../../hooks/use-title";
 import { ProductFormData } from "./models/product-form-data";
 
 export const ProductsPage: React.FC = () => {
-
-    useTitle("Products");
 
     const { $api } = React.useContext(GlobalContext);
 
@@ -20,6 +17,7 @@ export const ProductsPage: React.FC = () => {
     const [activeProduct, setActiveProduct] = React.useState<Product | null>(null);
 
     React.useEffect(() => {
+        document.title = "Products";
         fetchProducts();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -41,7 +39,7 @@ export const ProductsPage: React.FC = () => {
         setIsProductViewModalOpen(v => !v);
     }
 
-    const handleSubmit = async (data: ProductFormData) => {
+    const handleSubmit = useLoader(async (data: ProductFormData) => {
         const isEdit = activeProduct !== null;
         if (isEdit && !activeProduct.id) {
             console.error("Edited product hasn't id");
@@ -62,7 +60,7 @@ export const ProductsPage: React.FC = () => {
         setIsProductViewModalOpen(false);
         setActiveProduct(null);
         await fetchProducts();
-    }
+    })
 
     const postImage = async (productId: number, imageBase64: string): Promise<void> => {
         const response = await $api.Image.post(imageBase64);

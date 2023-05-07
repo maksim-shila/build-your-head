@@ -1,5 +1,6 @@
-import { Button, ButtonGroup, Col, Row, Table } from "reactstrap";
+import { Button, ButtonGroup, Table } from "reactstrap";
 import { Dish } from "../../../../api/models";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
     dishes: Dish[],
@@ -8,6 +9,9 @@ interface Props {
 }
 
 export const DishesList: React.FC<Props> = ({ dishes, onEdit, onDelete }) => {
+
+    const navigate = useNavigate();
+
     return (
         <div>
             {dishes && dishes.length > 0 &&
@@ -28,6 +32,7 @@ export const DishesList: React.FC<Props> = ({ dishes, onEdit, onDelete }) => {
                                     <ButtonGroup>
                                         <Button color="warning" onClick={() => onEdit(dish)}>Edit</Button>
                                         <Button color="dark" onClick={() => onDelete(dish)}>Delete</Button>
+                                        <Button color="success" onClick={() => navigate(`/dish/${dish.id}`)}>View</Button>
                                     </ButtonGroup>
                                 </td>
                             </tr>

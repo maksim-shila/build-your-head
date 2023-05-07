@@ -1,9 +1,10 @@
-import { useTitle } from "./hooks/use-title";
+import React from "react";
 
 export const Home: React.FC = () => {
 
-    useTitle("Build Your Head");
-
+    React.useEffect(() => {
+        document.title = "Build Your Head";
+    })
     return (
         <div>What a wonderful world</div>
     );
