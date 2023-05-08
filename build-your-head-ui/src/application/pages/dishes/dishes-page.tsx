@@ -24,8 +24,13 @@ export const DishesPage: React.FC = () => {
     }, []);
 
     const fetchDishes = useLoader(async (): Promise<void> => {
-        const response = await $api.Dish.getAll();
-        setDishes(response.data);
+        const request = $api.Dish.getAll();
+        const response = await request.invoke();
+        const dishes = response.data;
+        if (!response.success || dishes == null) {
+            return;
+        }
+        setDishes(dishes);
     })
 
     const toggleDishViewModal = () => setIsDishViewModalOpen(c => !c);
@@ -43,7 +48,8 @@ export const DishesPage: React.FC = () => {
         }
 
         const { ...dish } = data;
-        const response = await (isEdit ? $api.Dish.post(activeDish.id!, dish) : $api.Dish.put(dish));
+        const request = isEdit ? $api.Dish.post(activeDish.id!, dish) : $api.Dish.put(dish);
+        const response = await request.invoke();
         const dishId = response.data?.id;
         if (!dishId) {
             console.error(`Failed to ${isEdit ? "update" : "create"} dish`);
@@ -63,7 +69,11 @@ export const DishesPage: React.FC = () => {
             console.error("Couldn't delete dish without id");
             return;
         }
-        await $api.Dish.delete(dish.id);
+        const request = $api.Dish.delete(dish.id)
+        const response = await request.invoke();
+        if (!response.success) {
+            return;
+        }
         await fetchDishes();
     }
 

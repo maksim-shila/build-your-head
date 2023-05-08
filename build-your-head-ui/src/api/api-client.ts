@@ -1,64 +1,57 @@
-import axios, { AxiosInstance, AxiosResponse, CreateAxiosDefaults } from "axios";
-import { Dish, Product } from "./models";
+import { ApiCall, ApiClientBase } from "./core"
+import { AttachImageRequest, Dish, Product } from "./models"
 
-axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-axios.defaults.headers.post["Content-Type"] = "application/json";
-axios.defaults.headers.put["Content-Type"] = "application/json";
-
-interface AttachImageRequest {
-    productId: number,
-    imagePath: string,
-    primary: boolean
-}
-
-export class ApiClient {
-
-    private readonly api: AxiosInstance;
-
-    constructor(token: string | null | undefined) {
-        const config: CreateAxiosDefaults = {
-            baseURL: process.env.REACT_APP_API_URL,
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                get: {
-                    "Accept": "application/json"
-                },
-                post: {
-                    "Content-Type": "application/json"
-                },
-                put: {
-                    "Content-Type": "application/json"
-                }
-            }
-        }
-        this.api = axios.create(config);
-    }
-
-    public login = async (userName: string): Promise<string> => {
-        const response = await axios.get(`/login/${userName}`);
-        const token = response.data;
-        return token;
-    }
-
-    public readonly Dish = {
-        get: (id: number): Promise<AxiosResponse<Dish>> => this.api.get(`/dish/${id}`),
-        getAll: (): Promise<AxiosResponse<Dish[]>> => this.api.get("/dish"),
-        put: (dish: Dish): Promise<AxiosResponse<Dish>> => this.api.put("/dish", dish),
-        post: (id: number, dish: Dish): Promise<AxiosResponse<Dish>> => this.api.post(`/dish/${id}`, dish),
-        delete: (id: number): Promise<AxiosResponse> => this.api.delete(`/dish/${id}`),
-    }
-
-    public readonly Product = {
-        get: (id: number): Promise<AxiosResponse<Product>> => this.api.get(`/product/${id}`),
-        getAll: (): Promise<AxiosResponse<Product[]>> => this.api.get("/product"),
-        put: (product: Product): Promise<AxiosResponse<Product>> => this.api.put("/product", product),
-        post: (id: number, product: Product): Promise<AxiosResponse<Product>> => this.api.post(`/product/${id}`, product),
-        delete: (id: number): Promise<AxiosResponse> => this.api.delete(`/product/${id}`),
-        attachImage: (req: AttachImageRequest): Promise<AxiosResponse> => this.api.post(`/product/${req.productId}/image`, { imagePath: req.imagePath, primary: req.primary }),
-        getPrimaryImage: (productId: number): Promise<AxiosResponse<string>> => this.api.get(`/product/${productId}/image/primary`),
-    }
-
-    public readonly Image = {
-        post: (imageBase64: string): Promise<AxiosResponse<string>> => this.api.post("/image", { imageBase64 })
+export interface IApiClient {
+    login: (userName: string) => ApiCall<string>,
+    Dish: {
+        get: (id: number) => ApiCall<Dish>,
+        getAll: () => ApiCall<Dish[]>,
+        put: (dish: Dish) => ApiCall<Dish>,
+        post: (id: number, dish: Dish) => ApiCall<Dish>,
+        delete: (id: number) => ApiCall<string>
+    },
+    Product: {
+        get: (id: number) => ApiCall<Product>,
+        getAll: () => ApiCall<Product[]>,
+        put: (product: Product) => ApiCall<Product>,
+        post: (id: number, product: Product) => ApiCall<Product>,
+        delete: (id: number) => ApiCall<string>,
+        attachImage: (request: AttachImageRequest) => ApiCall<string>,
+        getPrimaryImage: (productId: number) => ApiCall<string>
+    },
+    Image: {
+        post: (imageBase64: string) => ApiCall<string>
     }
 }
+
+export class ApiClient extends ApiClientBase implements IApiClient {
+
+    public login = (userName: string) => this.get<string>(`/login/${userName}`);
+
+    public Dish = {
+        get: (id: number) => this.get<Dish>(`/dish/${id}`),
+        getAll: () => this.get<Dish[]>("/dish"),
+        put: (dish: Dish) => this.put<Dish>("/dish", dish),
+        post: (id: number, dish: Dish) => this.post<Dish>(`/dish/${id}`, dish),
+        delete: (id: number) => this.delete<string>(`/dish/${id}`),
+    }
+
+    public Product = {
+        get: (id: number) => this.get<Product>(`/product/${id}`),
+        getAll: () => this.get<Product[]>("/product"),
+        put: (product: Product) => this.put<Product>("/product", product),
+        post: (id: number, product: Product) => this.post<Product>(`/product/${id}`, product),
+        delete: (id: number) => this.delete<string>(`/product/${id}`),
+        attachImage: (request: AttachImageRequest) => {
+            const url = `/product/${request.productId}/image`;
+            const body = { imagePath: request.imagePath, primary: request.primary };
+            return this.post<string>(url, body);
+        },
+        getPrimaryImage: (productId: number) => this.get<string>(`/product/${productId}/image/primary`)
+    }
+
+    public Image = {
+        post: (imageBase64: string) => this.post<string>("/image", { imageBase64 })
+    }
+}
+

@@ -1,5 +1,5 @@
 import React from "react";
-import { ApiClient } from "../../api/api-client";
+import { ApiClient, IApiClient } from "../../api/api-client";
 import Cookies from "js-cookie";
 import { useLoader } from "../../hooks/loader";
 import { dateNowPlus } from "../../utils/date";
@@ -10,7 +10,7 @@ type User = {
 }
 
 interface IGlobalContext {
-    $api: ApiClient;
+    $api: IApiClient;
     $user: User | null;
     login: (userName: string) => unknown;
     logout: () => unknown;
@@ -35,7 +35,7 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({ ch
 
     const [isReady, setIsReady] = React.useState(false);
     const [user, setUser] = React.useState<User | null>(null);
-    const [apiClient, setApiClient] = React.useState<ApiClient>(DEFAULT_CLIENT);
+    const [apiClient, setApiClient] = React.useState<IApiClient>(DEFAULT_CLIENT);
 
     React.useEffect(() => {
         setUserFromCookies();
@@ -54,8 +54,11 @@ export const GlobalContextProvider: React.FC<GlobalContextProviderProps> = ({ ch
     });
 
     const login = async (userName: string) => {
-        const token = await apiClient.login(userName);
-
+        const response = await apiClient.login(userName).invoke();
+        const token = response.data;
+        if (!response.success || !token) {
+            return;
+        }
         const expires = dateNowPlus({ minutes: TOKEN_EXPIRATION_MIN });
         Cookies.set("user_name", userName, { expires: expires });
         Cookies.set("token", token, { expires: expires });
