@@ -1,19 +1,34 @@
-import axios, { AxiosInstance, AxiosResponse, CreateAxiosDefaults } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse, CreateAxiosDefaults } from "axios";
+import { toast } from "react-toastify";
+
+type MessageType = "info" | "success" | "warning" | "error";
 
 export class ApiCall<T> {
 
     private readonly action: () => Promise<AxiosResponse<T>>;
+    private messageType: MessageType;
 
     constructor(action: () => Promise<AxiosResponse<T>>) {
         this.action = action;
+        this.messageType = "error";
     }
 
     public async invoke(): ApiCallResult<T> {
         try {
             const axiosResponse = await this.action();
             return { success: true, data: axiosResponse.data };
-        } catch (error) {
-            console.log(error);
+        } catch (error: unknown) {
+            if (!(error instanceof AxiosError)) {
+                toast("Unknown error", { type: "error" });
+                return { success: false, data: null };
+            }
+
+            let message = error.message;
+            const errorResponse = error.response?.data;
+            if (errorResponse) {
+                message = errorResponse.Error;
+            }
+            toast(message, { type: this.messageType });
             return { success: false, data: null };
         }
     }
