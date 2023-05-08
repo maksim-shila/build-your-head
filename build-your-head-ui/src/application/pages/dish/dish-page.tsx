@@ -22,16 +22,22 @@ export const DishPage: React.FC<Props> = () => {
         (async () => {
             document.title = "Loading...";
             const dish = await fetchDish(Number(dishId));
-            document.title = `Dish: ${dish.name}`;
+            if (dish != null) {
+                document.title = `Dish: ${dish.name}`;
+            }
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dishId]);
 
-    const fetchDish = useLoader(async (id: number): Promise<Dish> => {
-        const response = await $api.Dish.get(id);
-        const data = response.data;
-        setDish(data);
-        return data;
+    const fetchDish = useLoader(async (id: number): Promise<Dish | null> => {
+        const request = $api.Dish.get(id);
+        const response = await request.invoke();
+        const dish = response.data;
+        if (!response.success || dish == null) {
+            return null;
+        }
+        setDish(dish);
+        return dish;
     });
 
     return (

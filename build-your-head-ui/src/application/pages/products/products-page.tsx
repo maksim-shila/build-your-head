@@ -23,8 +23,12 @@ export const ProductsPage: React.FC = () => {
     }, []);
 
     const fetchProducts = useLoader(async (): Promise<void> => {
-        const response = await $api.Product.getAll();
-        setProducts(response.data);
+        const response = await $api.Product.getAll().invoke();
+        const products = response.data;
+        if (!response.success || products == null) {
+            return;
+        }
+        setProducts(products);
     })
 
     const showProductViewModal = (product: Product | null) => {
@@ -47,7 +51,8 @@ export const ProductsPage: React.FC = () => {
         }
 
         const { imageBase64, imageChanged, ...product } = data;
-        const response = await (isEdit ? $api.Product.post(activeProduct.id!, product) : $api.Product.put(product));
+        const request = isEdit ? $api.Product.post(activeProduct.id!, product) : $api.Product.put(product);
+        const response = await request.invoke();
         const productId = response.data?.id;
         if (!productId) {
             console.error(`Failed to ${isEdit ? "update" : "create"} product`);
@@ -63,14 +68,13 @@ export const ProductsPage: React.FC = () => {
     })
 
     const postImage = async (productId: number, imageBase64: string): Promise<void> => {
-        const response = await $api.Image.post(imageBase64);
+        const response = await $api.Image.post(imageBase64).invoke();
         const imagePath = response.data;
-        if (!imagePath) {
-            console.error("Failed to upload image");
+        if (!response.success || !imagePath) {
             return;
         }
 
-        await $api.Product.attachImage({ productId, imagePath, primary: true });
+        await $api.Product.attachImage({ productId, imagePath, primary: true }).invoke();
     }
 
     const deleteProduct = async (product: Product) => {
@@ -78,7 +82,11 @@ export const ProductsPage: React.FC = () => {
             console.error("Couldn't delete product without id");
             return;
         }
-        await $api.Product.delete(product.id);
+        const request = $api.Product.delete(product.id)
+        const response = await request.invoke();
+        if (!response.success) {
+            return;
+        }
         await fetchProducts();
     }
 

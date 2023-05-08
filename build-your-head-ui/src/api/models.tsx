@@ -13,3 +13,9 @@ export interface Dish {
     name: string,
     description?: string
 }
+
+export interface AttachImageRequest {
+    productId: number,
+    imagePath: string,
+    primary: boolean
+}

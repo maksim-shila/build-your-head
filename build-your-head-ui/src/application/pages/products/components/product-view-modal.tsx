@@ -56,7 +56,7 @@ export const ProductViewModal: React.FC<Props> = ({ isOpen, toggle, product, onS
     }, [isOpen, product])
 
     const fetchImage = async (productId: number): Promise<string | null> => {
-        const response = await $api.Product.getPrimaryImage(productId);
+        const response = await $api.Product.getPrimaryImage(productId).invoke();
         return response.data;
     }
 
