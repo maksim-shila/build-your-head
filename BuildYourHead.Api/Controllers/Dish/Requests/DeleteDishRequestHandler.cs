@@ -1,5 +1,5 @@
-﻿using BuildYourHead.Application.Services;
-using BuildYourHead.Application.Services.Impl;
+﻿using BuildYourHead.Api.Exceptions;
+using BuildYourHead.Application.Services;
 
 namespace BuildYourHead.Api.Controllers.Dish.Requests
 {
@@ -14,6 +14,11 @@ namespace BuildYourHead.Api.Controllers.Dish.Requests
 
         public string Handle(int id)
         {
+            if (id <= 0)
+            {
+                throw new ValidationException("Dish id should be greater than zero");
+            }
+
             _dishService.Delete(id);
             return $"Dish {id} successfully removed";
         }
