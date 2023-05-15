@@ -40,7 +40,7 @@ export const AvatarUpload: React.FC<AvatarUploadProps> = ({ initial, onChange })
                 :
                 <span className={styles.plusButton} />
             }
-            <input hidden type="file" accept=".jpg, .jpeg, .png, .avif, .jvif" onChange={handleChange} />
+            <input hidden type="file" accept="image/*" onChange={handleChange} />
         </label>
     );
 }
