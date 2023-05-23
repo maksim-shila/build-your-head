@@ -8,7 +8,7 @@ export interface Product {
     nutrition: number
 }
 
-export interface Dish {
+export interface Recipe {
     id?: number,
     name: string,
     description?: string

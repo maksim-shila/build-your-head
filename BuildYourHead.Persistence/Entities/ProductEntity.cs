@@ -11,7 +11,7 @@
         public double Nutrition { get; set; }
 
         public List<ProductImageEntity> Images { get; set; } = new List<ProductImageEntity>();
-        public List<DishEntity> Dishes { get; set; } = new List<DishEntity>();
-        public List<DishProductEntity> DishProducts { get; set; } = new List<DishProductEntity>();
+        public List<RecipeEntity> Recipes { get; set; } = new List<RecipeEntity>();
+        public List<RecipeProductEntity> RecipeProducts { get; set; } = new List<RecipeProductEntity>();
     }
 }

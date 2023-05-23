@@ -23,13 +23,13 @@ namespace BuildYourHead.Api.Extensions
         public static void AddApplicationServices(this IServiceCollection services)
         {
             services.AddTransient<IProductService, ProductService>();
-            services.AddTransient<IDishService, DishService>();
+            services.AddTransient<IRecipeService, RecipeService>();
 
             services.AddTransient<IImageStorage, DbImageStorage>();
             services.AddTransient<IImageService, ImageService>();
 
             services.AddTransient<IProductMapper, ProductMapper>();
-            services.AddTransient<IDishMapper, DishMapper>();
+            services.AddTransient<IRecipeMapper, RecipeMapper>();
         }
 
         public static void AddRequestHandlers(this IServiceCollection services)

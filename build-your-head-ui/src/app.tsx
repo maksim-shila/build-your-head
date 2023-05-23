@@ -8,8 +8,8 @@ import { LoginPage } from "./application/pages/login/login-page";
 import { Home } from "./home";
 import { Loader } from "./hooks/loader";
 import { ProductsPage } from "./application/pages/products/products-page";
-import { DishesPage } from "./application/pages/dishes/dishes-page";
-import { DishPage } from "./application/pages/dish/dish-page";
+import { RecipesPage } from "./application/pages/recipes/recipes-page";
+import { RecipePage } from "./application/pages/recipe/recipe-page";
 import { ToastContainer } from "react-toastify";
 import React from "react";
 
@@ -27,8 +27,8 @@ export const App = () => {
               <Routes>
                 <Route path="/" Component={Home} />
                 <Route path="/products" Component={ProductsPage} />
-                <Route path="/dishes" Component={DishesPage} />
-                <Route path="/dish/:dishId" Component={DishPage} />
+                <Route path="/recipes" Component={RecipesPage} />
+                <Route path="/recipe/:recipeId" Component={RecipePage} />
                 <Route path="/login" Component={LoginPage} />
                 <Route path="*" element={<Navigate to="/" />} />
               </Routes>

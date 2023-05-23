@@ -3,8 +3,8 @@ using BuildYourHead.Persistence.Repositories.Interfaces;
 
 namespace BuildYourHead.Persistence.Repositories.Impl
 {
-    internal class DishRepository : RepositoryBase<DishEntity, int>, IDishRepository
+    internal class RecipeRepository : RepositoryBase<RecipeEntity, int>, IRecipeRepository
     {
-        public DishRepository(ApplicationContext context) : base(context) { }
+        public RecipeRepository(ApplicationContext context) : base(context) { }
     }
 }

@@ -18,42 +18,6 @@ namespace BuildYourHead.Persistence.Migrations
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.DishEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext")
-                        .HasColumnName("Description");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext")
-                        .HasColumnName("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Dish", (string)null);
-                });
-
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.DishProductEntity", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DishId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductId", "DishId");
-
-                    b.HasIndex("DishId");
-
-                    b.ToTable("DishProduct", (string)null);
-                });
-
             modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductEntity", b =>
                 {
                     b.Property<int>("Id")
@@ -118,23 +82,40 @@ namespace BuildYourHead.Persistence.Migrations
                     b.ToTable("ProductImage", (string)null);
                 });
 
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.DishProductEntity", b =>
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.RecipeEntity", b =>
                 {
-                    b.HasOne("BuildYourHead.Persistence.Entities.DishEntity", "Dish")
-                        .WithMany("DishProducts")
-                        .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
-                    b.HasOne("BuildYourHead.Persistence.Entities.ProductEntity", "Product")
-                        .WithMany("DishProducts")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext")
+                        .HasColumnName("Description");
 
-                    b.Navigation("Dish");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext")
+                        .HasColumnName("Name");
 
-                    b.Navigation("Product");
+                    b.HasKey("Id");
+
+                    b.ToTable("Recipe", (string)null);
+                });
+
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.RecipeProductEntity", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "RecipeId");
+
+                    b.HasIndex("RecipeId");
+
+                    b.ToTable("RecipeProduct", (string)null);
                 });
 
             modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductImageEntity", b =>
@@ -148,16 +129,35 @@ namespace BuildYourHead.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("BuildYourHead.Persistence.Entities.DishEntity", b =>
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.RecipeProductEntity", b =>
                 {
-                    b.Navigation("DishProducts");
+                    b.HasOne("BuildYourHead.Persistence.Entities.ProductEntity", "Product")
+                        .WithMany("RecipeProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BuildYourHead.Persistence.Entities.RecipeEntity", "Recipe")
+                        .WithMany("RecipeProducts")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Recipe");
                 });
 
             modelBuilder.Entity("BuildYourHead.Persistence.Entities.ProductEntity", b =>
                 {
-                    b.Navigation("DishProducts");
-
                     b.Navigation("Images");
+
+                    b.Navigation("RecipeProducts");
+                });
+
+            modelBuilder.Entity("BuildYourHead.Persistence.Entities.RecipeEntity", b =>
+                {
+                    b.Navigation("RecipeProducts");
                 });
 #pragma warning restore 612, 618
         }

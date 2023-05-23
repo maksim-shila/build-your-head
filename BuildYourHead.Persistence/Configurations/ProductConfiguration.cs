@@ -19,9 +19,9 @@ namespace BuildYourHead.Persistence.Configurations
             builder.Property(p => p.Nutrition).HasColumnName("Nutrition");
 
             builder
-                .HasMany(p => p.Dishes)
+                .HasMany(p => p.Recipes)
                 .WithMany(d => d.Products)
-                .UsingEntity<DishProductEntity>();
+                .UsingEntity<RecipeProductEntity>();
         }
     }
 }

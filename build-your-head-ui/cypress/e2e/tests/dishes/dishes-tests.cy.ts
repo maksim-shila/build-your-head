@@ -1,101 +1,101 @@
-import { DishApiMock } from "../../../core/mocks/dish-api-mock";
-import { Dish } from "../../../core/models/dish";
-import { DishPage } from "../../../core/sreen/dish/dish-page";
-import { DishesPage } from "../../../core/sreen/dishes/dishes-page";
+import { RecipeApiMock } from "../../../core/mocks/recipe-api-mock";
+import { Recipe } from "../../../core/models/recipe";
+import { RecipePage } from "../../../core/sreen/recipe/recipe-page";
+import { RecipesPage } from "../../../core/sreen/recipes/recipes-page";
 import { Guid } from "../../../core/utils/guid";
 
-describe("Dishes Create/Update/Delete", () => {
+describe("Recipe Create/Update/Delete", () => {
 
-    const dishesPage = new DishesPage();
-    const dishesApi = new DishApiMock();
+    const recipesPage = new RecipesPage();
+    const recipesApi = new RecipeApiMock();
 
-    beforeEach("Mock Dishes API", () => {
-        dishesApi.setUp();
+    beforeEach("Mock Recipes API", () => {
+        recipesApi.setUp();
     });
 
-    it("Add dish -> new dish created", () => {
+    it("Add recipe -> new recipe created", () => {
         // Arrange
-        const dish: Dish = {
+        const recipe: Recipe = {
             name: Guid.next(),
             description: "New Description"
         };
 
         // Act
-        dishesPage
+        recipesPage
             .open()
-            .clickAddDish()
-            .fill(dish)
+            .clickAddRecipe()
+            .fill(recipe)
             .clickAdd();
 
         // Assert
-        new DishPage(dish).shouldBeOpened();
-        dishesPage
+        new RecipePage(recipe).shouldBeOpened();
+        recipesPage
             .open()
-            .dishesList
-            .shouldHaveDish(dish);
+            .recipesList
+            .shouldHaveRecipe(recipe);
     });
 
-    it("Edit dish -> dish info changed", () => {
+    it("Edit recipe -> recipe info changed", () => {
         // Arrange
-        const dishName = Guid.next();
-        const dish: Dish = {
-            name: dishName,
+        const recipeName = Guid.next();
+        const recipe: Recipe = {
+            name: recipeName,
             description: "New Description"
         };
-        const updatedDish: Dish = {
-            name: dishName + " Updated",
+        const updatedRecipe: Recipe = {
+            name: recipeName + " Updated",
             description: "Updated Description"
         }
-        dishesApi.addDish(dish);
+        recipesApi.addRecipe(recipe);
 
         // Act
-        dishesPage
+        recipesPage
             .open()
-            .dishesList
-            .clickEdit(dish)
-            .shouldBePrepopulated(dish)
-            .fill(updatedDish)
+            .recipesList
+            .clickEdit(recipe)
+            .shouldBePrepopulated(recipe)
+            .fill(updatedRecipe)
             .clickUpdate()
             .shouldBeClosed();
 
         // Assert
-        dishesPage.dishesList.shouldHaveDish(updatedDish);
-        dishesPage.dishesList.shouldNotHaveDish(dish);
+        recipesPage.recipesList.shouldHaveRecipe(updatedRecipe);
+        recipesPage.recipesList.shouldNotHaveRecipe(recipe);
     });
 
-    it("Delete dish -> dish removed from list", () => {
+    it("Delete recipe -> recipe removed from list", () => {
         // Arrange
-        const dish: Dish = {
+        const recipe: Recipe = {
             name: Guid.next(),
             description: "New Description"
         };
-        dishesApi.addDish(dish);
+        recipesApi.addRecipe(recipe);
 
         // Act
-        dishesPage
+        recipesPage
             .open()
-            .dishesList
-            .clickDelete(dish);
+            .recipesList
+            .clickDelete(recipe);
 
         // Assert
-        dishesPage.dishesList.shouldNotHaveDish(dish);
+        recipesPage.recipesList.shouldNotHaveRecipe(recipe);
     })
 
-    it("View dish -> dish page opened", () => {
+    it("View recipe -> recipe page opened", () => {
         // Arrange
-        const dish: Dish = {
+        const recipe: Recipe = {
             name: Guid.next(),
             description: "New Description"
         };
-        dishesApi.addDish(dish);
+        recipesApi.addRecipe(recipe);
 
         // Act
-        const dishPage = dishesPage
+        const recipePage = recipesPage
             .open()
-            .dishesList
-            .clickView(dish);
+            .recipesList
+            .clickView(recipe);
 
         // Assert
-        dishPage.shouldBeOpened();
+        recipePage.shouldBeOpened();
     });
 })

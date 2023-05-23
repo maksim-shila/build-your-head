@@ -31,7 +31,7 @@ export const NavBar: React.FC = () => {
                     </Col>
                     <Col>
                         <NavItem>
-                            <NavLink href="/dishes">Dishes</NavLink>
+                            <NavLink href="/recipes">Recipes</NavLink>
                         </NavItem>
                     </Col>
                 </Row>

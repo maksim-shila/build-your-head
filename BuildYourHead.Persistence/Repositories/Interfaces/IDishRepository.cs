@@ -2,7 +2,7 @@
 
 namespace BuildYourHead.Persistence.Repositories.Interfaces
 {
-    public interface IDishRepository : IRepository<DishEntity, int>
+    public interface IRecipeRepository : IRepository<RecipeEntity, int>
     {
     }
 }

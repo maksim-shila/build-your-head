@@ -1,13 +1,13 @@
 import { ApiCall, ApiClientBase } from "./core"
-import { AttachImageRequest, Dish, Product } from "./models"
+import { AttachImageRequest, Recipe, Product } from "./models"
 
 export interface IApiClient {
     login: (userName: string) => ApiCall<string>,
-    Dish: {
-        get: (id: number) => ApiCall<Dish>,
-        getAll: () => ApiCall<Dish[]>,
-        put: (dish: Dish) => ApiCall<Dish>,
-        post: (id: number, dish: Dish) => ApiCall<Dish>,
+    Recipe: {
+        get: (id: number) => ApiCall<Recipe>,
+        getAll: () => ApiCall<Recipe[]>,
+        put: (recipe: Recipe) => ApiCall<Recipe>,
+        post: (id: number, recipe: Recipe) => ApiCall<Recipe>,
         delete: (id: number) => ApiCall<string>
     },
     Product: {
@@ -28,12 +28,12 @@ export class ApiClient extends ApiClientBase implements IApiClient {
 
     public login = (userName: string) => this.get<string>(`/login/${userName}`);
 
-    public Dish = {
-        get: (id: number) => this.get<Dish>(`/dish/${id}`),
-        getAll: () => this.get<Dish[]>("/dish"),
-        put: (dish: Dish) => this.put<Dish>("/dish", dish),
-        post: (id: number, dish: Dish) => this.post<Dish>(`/dish/${id}`, dish),
-        delete: (id: number) => this.delete<string>(`/dish/${id}`),
+    public Recipe = {
+        get: (id: number) => this.get<Recipe>(`/recipe/${id}`),
+        getAll: () => this.get<Recipe[]>("/recipe"),
+        put: (recipe: Recipe) => this.put<Recipe>("/recipe", recipe),
+        post: (id: number, recipe: Recipe) => this.post<Recipe>(`/recipe/${id}`, recipe),
+        delete: (id: number) => this.delete<string>(`/recipe/${id}`),
     }
 
     public Product = {
