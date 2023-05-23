@@ -3,6 +3,10 @@ import { Recipe } from "../../../api/models";
 import { useLoader } from "../../../hooks/loader";
 import { GlobalContext } from "../../context/global-context";
 import { useParams } from "react-router-dom";
+import { Button } from "reactstrap";
+import { RecipeInfo } from "./components/recipe-info";
+import { RecipeComposition } from "./components/recipe-composition";
+import { RecipeSteps } from "./components/recipe-steps";
 
 interface Props {
 }
@@ -39,14 +43,17 @@ export const RecipePage: React.FC<Props> = () => {
         return recipe;
     });
 
+    if (!recipe) {
+        return null;
+    }
+
     return (
         <React.Fragment>
-            {recipe &&
-                <div>
-                    <div>{recipe.name}</div>
-                    <div>{recipe.description}</div>
-                </div>
-            }
+            <RecipeInfo recipe={recipe} />
+            <hr />
+            <RecipeComposition recipe={recipe} />
+            <hr />
+            <RecipeSteps recipe={recipe} />
         </React.Fragment>
     )
 }
