@@ -4,6 +4,7 @@ namespace BuildYourHead.Persistence.Repositories.Interfaces
 {
     public interface IRecipeProductRepository : IRepository<RecipeProductEntity, int[]>
     {
-        IList<RecipeProductEntity> FindByRecipeId(int recipeId);
+        void Add(int recipeId, IList<int> productsIds);
+        IList<ProductEntity> FindProductsByRecipeId(int recipeId);
     }
 }

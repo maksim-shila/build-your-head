@@ -12,6 +12,9 @@ namespace BuildYourHead.Persistence.Configurations
 
             builder.HasKey(rp => new { rp.ProductId, rp.RecipeId });
 
+            builder.Property(d => d.ProductId).HasColumnName("ProductId");
+            builder.Property(d => d.RecipeId).HasColumnName("RecipeId");
+
             builder
                 .HasOne(rp => rp.Product)
                 .WithMany(p => p.RecipeProducts)
@@ -20,9 +23,6 @@ namespace BuildYourHead.Persistence.Configurations
                 .HasOne(rp => rp.Recipe)
                 .WithMany(p => p.RecipeProducts)
                 .HasForeignKey(rp => rp.RecipeId);
-
-            builder.Navigation(rp => rp.Product).AutoInclude();
-            builder.Navigation(rp => rp.Recipe).AutoInclude();
         }
     }
 }

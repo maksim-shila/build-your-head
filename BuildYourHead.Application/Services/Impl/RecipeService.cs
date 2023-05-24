@@ -28,7 +28,7 @@ namespace BuildYourHead.Application.Services.Impl
             var entity = _uow.Recipes.Get(id);
             if (entity == null)
             {
-                throw new NotFoundException($"Recipe with id {id} not found.");
+                throw new EntityNotFoundException($"Recipe with id {id} not found.");
             }
 
             return _recipeMapper.ToDto(entity);
@@ -55,7 +55,7 @@ namespace BuildYourHead.Application.Services.Impl
             var entity = _uow.Recipes.Get(id);
             if (entity == null)
             {
-                throw new NotFoundException($"Recipe with id {id} not found.");
+                throw new EntityNotFoundException($"Recipe with id {id} not found.");
             }
             _uow.Recipes.Delete(entity);
             _uow.Save();
@@ -63,32 +63,27 @@ namespace BuildYourHead.Application.Services.Impl
 
         public IList<ProductDto> GetProducts(int recipeId)
         {
-            var entities = _uow.RecipeProducts.FindByRecipeId(recipeId);
-            var productEntities = entities.Select(e => e.Product);
+            var productEntities = _uow.RecipeProducts.FindProductsByRecipeId(recipeId);
             return _productMapper.ToDtos(productEntities);
         }
 
         public void AddProducts(int recipeId, IList<int> productsIds)
         {
-            var entity = _uow.Recipes.Get(recipeId);
-            if (entity == null)
+            var recipeEntity = _uow.Recipes.Get(recipeId);
+            if (recipeEntity == null)
             {
-                throw new NotFoundException($"Recipe with id {recipeId} not found.");
+                throw new EntityNotFoundException($"Recipe with id {recipeId} not found.");
             }
-            if (productsIds != null && productsIds.Any())
+            foreach (var productId in productsIds)
             {
-                var products = productsIds.Select(id =>
+                var productEntity = _uow.Products.Get(productId);
+                if (productEntity == null)
                 {
-                    var product = _uow.Products.Get(id);
-                    if (product == null)
-                    {
-                        throw new EntityNotFoundException($"Product with id {id} not exists");
-                    }
-                    return product;
-                });
-                entity.Products.AddRange(products);
+                    throw new EntityNotFoundException($"Product with id {productId} not exists");
+                }
             }
-            _uow.Recipes.Update(entity);
+
+            _uow.RecipeProducts.Add(recipeId, productsIds);
             _uow.Save();
         }
     }

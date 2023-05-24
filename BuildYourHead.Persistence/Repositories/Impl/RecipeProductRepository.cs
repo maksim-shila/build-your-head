@@ -1,5 +1,6 @@
 ﻿using BuildYourHead.Persistence.Entities;
 using BuildYourHead.Persistence.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BuildYourHead.Persistence.Repositories.Impl
 {
@@ -7,9 +8,23 @@ namespace BuildYourHead.Persistence.Repositories.Impl
     {
         public RecipeProductRepository(ApplicationContext context) : base(context) { }
 
-        public IList<RecipeProductEntity> FindByRecipeId(int recipeId)
+        public void Add(int recipeId, IList<int> productsIds)
         {
-            return DbSet.Where(rp => rp.RecipeId == recipeId).ToList();
+            var entities = productsIds.Select(productId => new RecipeProductEntity
+            {
+                ProductId = productId,
+                RecipeId = recipeId
+            });
+            DbSet.AddRange(entities);
+        }
+
+        public IList<ProductEntity> FindProductsByRecipeId(int recipeId)
+        {
+            return DbSet
+                .Where(rp => rp.RecipeId == recipeId)
+                .Include(rp => rp.Product)
+                .Select(rp => rp.Product)
+                .ToList();
         }
     }
 }
