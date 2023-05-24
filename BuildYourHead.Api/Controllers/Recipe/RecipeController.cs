@@ -18,7 +18,7 @@ namespace BuildYourHead.Api.Controllers.Recipe
 
         [HttpPut]
         [Route("/api/recipe/")]
-        public IActionResult Put(AddRecipeRequest request, [FromServices] AddRecipeRequestHandler handler)
+        public IActionResult Put(AddRecipeRequest request, [FromServices] PutRecipeRequestHandler handler)
         {
             var result = handler.Handle(request);
             return Ok(result);

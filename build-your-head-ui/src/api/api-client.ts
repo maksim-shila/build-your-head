@@ -1,5 +1,5 @@
-import { ApiCall, ApiClientBase } from "./core"
-import { AttachImageRequest, Recipe, Product } from "./models"
+import { ApiCall, ApiClientBase } from "./core";
+import { AttachImageRequest, Recipe, Product } from "./models";
 
 export interface IApiClient {
     login: (userName: string) => ApiCall<string>,
@@ -8,7 +8,11 @@ export interface IApiClient {
         getAll: () => ApiCall<Recipe[]>,
         put: (recipe: Recipe) => ApiCall<Recipe>,
         post: (id: number, recipe: Recipe) => ApiCall<Recipe>,
-        delete: (id: number) => ApiCall<string>
+        delete: (id: number) => ApiCall<string>,
+        Products: {
+            get: (recipeId: number) => ApiCall<Product[]>,
+            put: (recipeId: number, products: Product[]) => ApiCall<string>
+        }
     },
     Product: {
         get: (id: number) => ApiCall<Product>,
@@ -34,6 +38,10 @@ export class ApiClient extends ApiClientBase implements IApiClient {
         put: (recipe: Recipe) => this.put<Recipe>("/recipe", recipe),
         post: (id: number, recipe: Recipe) => this.post<Recipe>(`/recipe/${id}`, recipe),
         delete: (id: number) => this.delete<string>(`/recipe/${id}`),
+        Products: {
+            get: (recipeId: number) => this.get<Product[]>(`/recipe/${recipeId}/products`),
+            put: (recipeId: number, products: Product[]) => this.put<string>(`/recipe/${recipeId}/products`, { productsIds: products.map(p => p.id) })
+        }
     }
 
     public Product = {

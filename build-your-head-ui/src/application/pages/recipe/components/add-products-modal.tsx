@@ -1,43 +1,44 @@
-import { List, ListInlineItem, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap"
+import { Button, List, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap"
 import { Product } from "../../../../api/models"
 import React from "react";
-import { useLoader } from "../../../../hooks/loader";
-import { GlobalContext } from "../../../context/global-context";
+import { ProductsSearch } from "./products-search";
 
 interface Props {
     isOpen: boolean,
-    toggle: () => unknown
+    toggle: () => unknown,
+    onSubmit: (products: Product[]) => unknown
 }
 
-export const AddProductsModal: React.FC<Props> = ({ isOpen, toggle }) => {
+export const AddProductsModal: React.FC<Props> = ({ isOpen, toggle, onSubmit }) => {
 
-    const { $api } = React.useContext(GlobalContext);
+    const [products, setProducts] = React.useState<Product[]>([])
 
-    const [products, setProducts] = React.useState<Product[]>([]);
+    const addProduct = (product: Product) => {
+        setProducts(prev => {
+            const newProducts = [...prev];
+            newProducts.push(product);
+            return newProducts;
+        })
+    }
 
-    React.useEffect(() => {
-        fetchProducts();
-    }, [])
-
-    const fetchProducts = useLoader(async () => {
-        const response = await $api.Product.getAll().invoke();
-        if (response.success && response.data) {
-            setProducts(response.data)
-        }
-    })
+    const handleAddProductsClick = () => {
+        onSubmit(products);
+    }
 
     return (
         <Modal id="productModal" isOpen={isOpen} toggle={toggle} size="lg">
             <ModalHeader toggle={toggle}>Add Products</ModalHeader>
             <ModalBody>
+                <ProductsSearch onAdd={addProduct} />
+                <hr />
                 <List>
-                    {products.map(product => (
-                        <ListInlineItem>{product.name}</ListInlineItem>
+                    {products.map(p => (
+                        <li key={p.id}>{p.name}</li>
                     ))}
                 </List>
-                <div>Selected products (TODO)</div>
             </ModalBody>
             <ModalFooter>
+                <Button color="success" onClick={handleAddProductsClick}>Add Products</Button>
             </ModalFooter>
         </Modal>
     )

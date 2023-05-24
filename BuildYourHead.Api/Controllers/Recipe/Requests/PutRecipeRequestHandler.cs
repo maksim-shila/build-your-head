@@ -4,11 +4,11 @@ using BuildYourHead.Application.Services;
 
 namespace BuildYourHead.Api.Controllers.Recipe.Requests
 {
-    public class AddRecipeRequestHandler : IRequestHandler
+    public class PutRecipeRequestHandler : IRequestHandler
     {
         private readonly IRecipeService _recipeService;
 
-        public AddRecipeRequestHandler(IRecipeService recipeService)
+        public PutRecipeRequestHandler(IRecipeService recipeService)
         {
             _recipeService = recipeService;
         }
@@ -25,7 +25,7 @@ namespace BuildYourHead.Api.Controllers.Recipe.Requests
                 Name = request.Name,
                 Description = request.Description
             };
-            return _recipeService.Add(dto, request.ProductIds);
+            return _recipeService.Add(dto);
         }
     }
 }

@@ -14,24 +14,24 @@ namespace BuildYourHead.Tests.Controllers.Recipe.Requests
             // Arrange
             var recipeServiceMock = new Mock<IRecipeService>();
             recipeServiceMock
-                .Setup(s => s.Add(It.IsAny<RecipeDto>(), It.IsAny<IList<int>>()))
+                .Setup(s => s.Add(It.IsAny<RecipeDto>()))
                 .Returns(It.IsAny<RecipeDto>());
-            var handler = new AddRecipeRequestHandler(recipeServiceMock.Object);
+            var handler = new PutRecipeRequestHandler(recipeServiceMock.Object);
 
             // Act
             var request = new AddRecipeRequest
             {
                 Name = "test name",
-                Description = "test description",
-                ProductIds = new List<int> { 1, 2 }
+                Description = "test description"
             };
             var result = handler.Handle(request);
 
             // Assert
             recipeServiceMock.Verify(s => s.Add(
-                It.Is<RecipeDto>(recipeDto => recipeDto.Name == request.Name && recipeDto.Description == request.Description),
-                request.ProductIds)
-            );
+                It.Is<RecipeDto>(recipeDto =>
+                    recipeDto.Name == request.Name &&
+                    recipeDto.Description == request.Description)
+            ));
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace BuildYourHead.Tests.Controllers.Recipe.Requests
         {
             // Arrange
             var recipeServiceMock = new Mock<IRecipeService>();
-            var handler = new AddRecipeRequestHandler(recipeServiceMock.Object);
+            var handler = new PutRecipeRequestHandler(recipeServiceMock.Object);
 
             // Act, Assert
             var request = new AddRecipeRequest { Name = null };

@@ -15,5 +15,5 @@
     - ADD BACKEND UNIT TESTS !!!!
     - [back] Implement users storage
     - [front] fix too long blob (compress images on upload)
-    - [front] add error handling (notifications)
     - [front] set up formatter
+    - [db] create script to generate default data
