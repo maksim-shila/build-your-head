@@ -63,13 +63,9 @@ namespace BuildYourHead.Application.Services.Impl
 
         public IList<ProductDto> GetProducts(int recipeId)
         {
-            var recipeEntity = _uow.Recipes.GetWithProducts(recipeId);
-            if (recipeEntity == null)
-            {
-                throw new NotFoundException($"Recipe with id {recipeId} not found.");
-            }
-
-            return _productMapper.ToDtos(recipeEntity.Products);
+            var entities = _uow.RecipeProducts.FindByRecipeId(recipeId);
+            var productEntities = entities.Select(e => e.Product);
+            return _productMapper.ToDtos(productEntities);
         }
 
         public void AddProducts(int recipeId, IList<int> productsIds)

@@ -10,16 +10,19 @@ namespace BuildYourHead.Persistence.Configurations
         {
             builder.ToTable("RecipeProduct");
 
-            builder.HasKey(dp => new { dp.ProductId, dp.RecipeId });
+            builder.HasKey(rp => new { rp.ProductId, rp.RecipeId });
 
             builder
-                .HasOne(dp => dp.Product)
+                .HasOne(rp => rp.Product)
                 .WithMany(p => p.RecipeProducts)
-                .HasForeignKey(dp => dp.ProductId);
+                .HasForeignKey(rp => rp.ProductId);
             builder
-                .HasOne(dp => dp.Recipe)
+                .HasOne(rp => rp.Recipe)
                 .WithMany(p => p.RecipeProducts)
-                .HasForeignKey(dp => dp.RecipeId);
+                .HasForeignKey(rp => rp.RecipeId);
+
+            builder.Navigation(rp => rp.Product).AutoInclude();
+            builder.Navigation(rp => rp.Recipe).AutoInclude();
         }
     }
 }

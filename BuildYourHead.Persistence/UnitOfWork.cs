@@ -10,6 +10,7 @@ namespace BuildYourHead.Persistence
             Products = new ProductRepository(context);
             ProductImages = new ProductImageRepository(context);
             Recipes = new RecipeRepository(context);
+            RecipeProducts = new RecipeProductRepository(context);
             Context = context;
         }
 
@@ -20,6 +21,7 @@ namespace BuildYourHead.Persistence
         public IProductRepository Products { get; }
         public IProductImageRepository ProductImages { get; }
         public IRecipeRepository Recipes { get; }
+        public IRecipeProductRepository RecipeProducts { get; }
 
         #endregion Repositories
 
