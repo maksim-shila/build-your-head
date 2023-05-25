@@ -9,9 +9,10 @@ export interface IApiClient {
         put: (recipe: Recipe) => ApiCall<Recipe>,
         post: (id: number, recipe: Recipe) => ApiCall<Recipe>,
         delete: (id: number) => ApiCall<string>,
-        Products: {
-            get: (recipeId: number) => ApiCall<Product[]>,
-            put: (recipeId: number, products: Product[]) => ApiCall<string>
+        Product: {
+            getAll: (recipeId: number) => ApiCall<Product[]>,
+            put: (recipeId: number, products: Product[]) => ApiCall<string>,
+            delete: (recipeId: number, product: Product) => ApiCall<string>
         }
     },
     Product: {
@@ -38,9 +39,10 @@ export class ApiClient extends ApiClientBase implements IApiClient {
         put: (recipe: Recipe) => this.put<Recipe>("/recipe", recipe),
         post: (id: number, recipe: Recipe) => this.post<Recipe>(`/recipe/${id}`, recipe),
         delete: (id: number) => this.delete<string>(`/recipe/${id}`),
-        Products: {
-            get: (recipeId: number) => this.get<Product[]>(`/recipe/${recipeId}/products`),
-            put: (recipeId: number, products: Product[]) => this.put<string>(`/recipe/${recipeId}/products`, { productsIds: products.map(p => p.id) })
+        Product: {
+            getAll: (recipeId: number) => this.get<Product[]>(`/recipe/${recipeId}/product`),
+            put: (recipeId: number, products: Product[]) => this.put<string>(`/recipe/${recipeId}/product`, { productsIds: products.map(p => p.id) }),
+            delete: (recipeId: number, product: Product) => this.delete<string>(`/recipe/${recipeId}/product/${product.id}`)
         }
     }
 

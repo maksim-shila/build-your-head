@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BuildYourHead.Persistence.Repositories.Impl
 {
-    internal class RecipeProductRepository : RepositoryBase<RecipeProductEntity, int[]>, IRecipeProductRepository
+    internal class RecipeProductRepository : RepositoryBase<RecipeProductEntity, int>, IRecipeProductRepository
     {
         public RecipeProductRepository(ApplicationContext context) : base(context) { }
 

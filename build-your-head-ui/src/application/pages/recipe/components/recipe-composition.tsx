@@ -27,7 +27,7 @@ export const RecipeComposition: React.FC<Props> = ({ recipe }) => {
             toast.error("Incorrect recipe ID");
             return;
         }
-        const response = await $api.Recipe.Products.get(recipe.id).invoke();
+        const response = await $api.Recipe.Product.getAll(recipe.id).invoke();
         if (response.success && response.data) {
             setProducts(response.data);
         }
@@ -37,25 +37,48 @@ export const RecipeComposition: React.FC<Props> = ({ recipe }) => {
         setIsAddProductsDialogShown(true)
     }
 
-    const handleAddProductsSubmit = async (products: Product[]) => {
+    const handleAddProductsSubmit = useLoader(async (products: Product[]) => {
         if (!recipe.id || recipe.id < 0) {
             toast.error("Incorrect recipe ID");
             return;
         }
-        const response = await $api.Recipe.Products.put(recipe.id, products).invoke();
+        const request = $api.Recipe.Product.put(recipe.id, products);
+        const response = await request.invoke();
         if (response.success) {
             toast.success(response.data);
             setIsAddProductsDialogShown(false);
             await fetchProducts();
         }
-    }
+    })
+
+    const handleDeleteClick = useLoader(async (product: Product) => {
+        if (!recipe.id || recipe.id < 0) {
+            toast.error("Incorrect recipe ID");
+            return;
+        }
+        const request = $api.Recipe.Product.delete(recipe.id, product);
+        const response = await request.invoke();
+        if (response.success) {
+            toast.success(response.data);
+            await fetchProducts();
+        }
+    })
 
     return (
         <React.Fragment>
             <h2>Composition</h2>
             <ListGroup flush={true}>
                 {products && products.map(product => (
-                    <ListGroupItem key={product.id}>{product.name}</ListGroupItem>
+                    <ListGroupItem key={product.id}>
+                        <span>{product.name}</span>
+                        <Button
+                            color="danger"
+                            className="float-end"
+                            onClick={() => handleDeleteClick(product)}
+                        >
+                            Delete
+                        </Button>
+                    </ListGroupItem>
                 ))}
             </ListGroup>
             <Button onClick={handleAddProductClick}>Add Product</Button>

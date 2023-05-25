@@ -86,5 +86,17 @@ namespace BuildYourHead.Application.Services.Impl
             _uow.RecipeProducts.Add(recipeId, productsIds);
             _uow.Save();
         }
+
+        public void DeleteRecipeProduct(int recipeId, int productId)
+        {
+            var recipeProduct = _uow.RecipeProducts.Get(recipeId, productId);
+            if (recipeProduct == null)
+            {
+                throw new EntityNotFoundException($"Product with id {productId} related to recipe with id {recipeId} not found.");
+            }
+
+            _uow.RecipeProducts.Delete(recipeProduct);
+            _uow.Save();
+        }
     }
 }

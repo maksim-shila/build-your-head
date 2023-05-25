@@ -84,7 +84,7 @@ namespace BuildYourHead.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RecipeProduct", x => new { x.ProductId, x.RecipeId });
+                    table.PrimaryKey("PK_RecipeProduct", x => new { x.RecipeId, x.ProductId });
                     table.ForeignKey(
                         name: "FK_RecipeProduct_Product_ProductId",
                         column: x => x.ProductId,
@@ -106,9 +106,9 @@ namespace BuildYourHead.Persistence.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RecipeProduct_RecipeId",
+                name: "IX_RecipeProduct_ProductId",
                 table: "RecipeProduct",
-                column: "RecipeId");
+                column: "ProductId");
         }
 
         /// <inheritdoc />

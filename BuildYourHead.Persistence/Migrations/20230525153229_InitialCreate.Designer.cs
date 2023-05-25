@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BuildYourHead.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20230523120908_InitialCreate")]
+    [Migration("20230525153229_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -108,15 +108,17 @@ namespace BuildYourHead.Persistence.Migrations
 
             modelBuilder.Entity("BuildYourHead.Persistence.Entities.RecipeProductEntity", b =>
                 {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("RecipeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RecipeId");
 
-                    b.HasKey("ProductId", "RecipeId");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("ProductId");
 
-                    b.HasIndex("RecipeId");
+                    b.HasKey("RecipeId", "ProductId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("RecipeProduct", (string)null);
                 });

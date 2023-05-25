@@ -16,6 +16,11 @@ namespace BuildYourHead.Persistence.Repositories
             return DbSet.Find(id);
         }
 
+        public virtual TEntity? Get(params object[] keys)
+        {
+            return DbSet.Find(keys);
+        }
+
         public virtual IEnumerable<TEntity> Get()
         {
             return DbSet.ToList();

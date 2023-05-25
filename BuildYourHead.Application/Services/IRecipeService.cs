@@ -11,5 +11,6 @@ namespace BuildYourHead.Application.Services
         void Delete(int id);
         IList<ProductDto> GetProducts(int recipeId);
         void AddProducts(int recipeId, IList<int> productsIds);
+        void DeleteRecipeProduct(int recipeId, int productId);
     }
 }

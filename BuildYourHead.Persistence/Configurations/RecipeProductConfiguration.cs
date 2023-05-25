@@ -10,7 +10,7 @@ namespace BuildYourHead.Persistence.Configurations
         {
             builder.ToTable("RecipeProduct");
 
-            builder.HasKey(rp => new { rp.ProductId, rp.RecipeId });
+            builder.HasKey(rp => new { rp.RecipeId, rp.ProductId });
 
             builder.Property(d => d.ProductId).HasColumnName("ProductId");
             builder.Property(d => d.RecipeId).HasColumnName("RecipeId");

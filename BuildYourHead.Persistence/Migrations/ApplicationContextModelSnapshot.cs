@@ -105,15 +105,17 @@ namespace BuildYourHead.Persistence.Migrations
 
             modelBuilder.Entity("BuildYourHead.Persistence.Entities.RecipeProductEntity", b =>
                 {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("RecipeId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("RecipeId");
 
-                    b.HasKey("ProductId", "RecipeId");
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int")
+                        .HasColumnName("ProductId");
 
-                    b.HasIndex("RecipeId");
+                    b.HasKey("RecipeId", "ProductId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("RecipeProduct", (string)null);
                 });
