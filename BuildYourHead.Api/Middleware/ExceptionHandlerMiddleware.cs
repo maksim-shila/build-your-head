@@ -36,11 +36,16 @@ namespace BuildYourHead.Api.Middleware
             switch (exception)
             {
                 case NotFoundException _:
+                case EntityNotFoundException _:
                     statusCode = (int)HttpStatusCode.NotFound;
                     message = exception.Message;
                     break;
                 case ValidationException _:
                     statusCode = (int)HttpStatusCode.BadRequest;
+                    message = exception.Message;
+                    break;
+                case AlreadyExistsException _:
+                    statusCode = (int)HttpStatusCode.Conflict;
                     message = exception.Message;
                     break;
                 default:

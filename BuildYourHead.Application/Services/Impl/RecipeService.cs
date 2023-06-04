@@ -74,6 +74,12 @@ namespace BuildYourHead.Application.Services.Impl
             {
                 throw new EntityNotFoundException($"Recipe with id {recipeId} not found.");
             }
+            var recipeProducts = _uow.RecipeProducts.FindProductsByRecipeId(recipeId);
+            var alreadyAddedProductsIds = recipeProducts.Select(p => p.Id).Intersect(productsIds);
+            if (alreadyAddedProductsIds.Any())
+            {
+                throw new AlreadyExistsException("Some Products already assigned");
+            }
             foreach (var productId in productsIds)
             {
                 var productEntity = _uow.Products.Get(productId);

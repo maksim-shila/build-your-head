@@ -14,7 +14,7 @@ export const RecipeComposition: React.FC<Props> = ({ recipe }) => {
 
     const { $api } = React.useContext(GlobalContext);
 
-    const [products, setProducts] = React.useState<Product[]>();
+    const [products, setProducts] = React.useState<Product[]>([]);
     const [isAddProductsDialogShown, setIsAddProductsDialogShown] = React.useState(false);
 
     React.useEffect(() => {
@@ -84,6 +84,7 @@ export const RecipeComposition: React.FC<Props> = ({ recipe }) => {
             <Button onClick={handleAddProductClick}>Add Product</Button>
             <AddProductsModal
                 isOpen={isAddProductsDialogShown}
+                existingProducts={products}
                 toggle={() => setIsAddProductsDialogShown(prev => !prev)}
                 onSubmit={handleAddProductsSubmit}
             />

@@ -1,6 +1,6 @@
 ﻿namespace BuildYourHead.Application.Exceptions
 {
-    internal class EntityNotFoundException : Exception
+    public class EntityNotFoundException : Exception
     {
         public EntityNotFoundException() : base() { }
 
