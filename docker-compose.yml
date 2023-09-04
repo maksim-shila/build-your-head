@@ -21,8 +21,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=server=192.168.68.108;port=3306;database=BuildYourHead;user=root;password=superadmin;
-      - ImageStorage__ConnectionString=server=192.168.68.108;port=3306;database=BuildYourHead.Images;user=root;password=superadmin;
+      - ConnectionStrings__DefaultConnection=server=${HOST};port=3306;database=BuildYourHead;user=root;password=superadmin;
+      - ImageStorage__ConnectionString=server=${HOST};port=3306;database=BuildYourHead.Images;user=root;password=superadmin;
 
   ui:
     depends_on: ["api"]
@@ -30,4 +30,4 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - REACT_APP_API_URL=http://192.168.68.108:8080/api
+      - REACT_APP_API_URL=http://${HOST}:8080/api
