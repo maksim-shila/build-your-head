@@ -22,7 +22,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=server=${DB_HOST};port=${DB_PORT};database=BuildYourHead;user=root;password=superadmin;
-      - ImageStorage__ConnectionString=server==${DB_HOST};port=${DB_PORT};database=BuildYourHead.Images;user=root;password=superadmin;
+      - ImageStorage__ConnectionString=server=${DB_HOST};port=${DB_PORT};database=BuildYourHead.Images;user=root;password=superadmin;
 
   ui:
     depends_on: ["api"]
